@@ -1,0 +1,1771 @@
+﻿@using BloodHub.Models
+@model BloodHub.Models.DashboardViewModel
+@{
+    var mode = (string?)Context?.Request?.Query["mode"];
+    bool tableOnly = string.Equals(mode, "table", StringComparison.OrdinalIgnoreCase);
+    bool fullMode = string.Equals(mode, "full", StringComparison.OrdinalIgnoreCase) || string.IsNullOrWhiteSpace(mode);
+    bool requestsMode = string.Equals(mode, "requests", StringComparison.OrdinalIgnoreCase);
+    bool ordersMode = string.Equals(mode, "orders", StringComparison.OrdinalIgnoreCase);
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<link rel="stylesheet" href="~/css/site.css" />
+
+<script>
+    $(document).ready(function () {
+    $('#requestsTable').DataTable();
+    });
+</script>
+
+<style>
+    :root {
+    --Apos: #6C5CE7;
+    --Aneg: #A78BFA;
+    --Bpos: #00B894;
+    --Bneg: #00CEC9;
+    --Opos: #FDCB6E;
+    --Oneg: #E17055;
+    --ABpos: #FF7675;
+    --ABneg: #74B9FF;
+    }
+
+    body {
+    background: linear-gradient(120deg,#e0e9ff,#ffe0f3,#fff1d6);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    }
+
+    .sidebar {
+    background: #121826;
+    color: #fff;
+    width: 220px;
+    min-height: 100vh;
+    flex-shrink: 0;
+    }
+
+    .sidebar .nav-link {
+    color: #d1d5db;
+    }
+
+    .sidebar .nav-link.active, .sidebar .nav-link:hover {
+    color: #fff;
+    background: #1f2937;
+    border-radius: 10px;
+    }
+
+    .card-grad {
+    border: 0;
+    color: #0b0f1a;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    }
+
+    .grad-1 {
+    background: linear-gradient(135deg,#a18cd1,#fbc2eb);
+    }
+
+    .grad-2 {
+    background: linear-gradient(135deg,#96fbc4,#f9f586);
+    }
+
+    .grad-3 {
+    background: linear-gradient(135deg,#ffd3a5,#fd6585);
+    }
+
+    .grad-4 {
+    background: linear-gradient(135deg,#74ebd5,#acb6e5);
+    }
+
+    .badge-chip {
+    border-radius: 10px;
+    font-weight: 700;
+    padding: .25rem .5rem;
+    }
+
+
+    /* Animated Table Styling */
+    .animated-table {
+    border-collapse: separate;
+    border-spacing: 0 10px; /* gap between rows */
+    width: 100%;
+    background: transparent;
+    font-size: 15px;
+    }
+
+    .animated-table thead {
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+    color: white;
+    border-radius: 8px;
+    }
+
+    .animated-table thead th {
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    }
+
+    .animated-table tbody tr {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .animated-table tbody tr:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    background: #f9f9ff;
+    }
+
+    .animated-table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+    text-align: center;
+    border: none;
+    }
+
+    /* Fade-in animation */
+    .animated-table tbody tr {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .animated-table tbody tr:nth-child(odd) {
+    background: #fdfdfd;
+    }
+
+    .animated-table tbody tr:nth-child(even) {
+    background: #f7f9fc;
+    }
+
+    .table {
+    border-radius: 8px;
+    overflow: hidden;
+    }
+
+    .table thead th {
+    text-align: center;
+    vertical-align: middle;
+    }
+
+    .table tbody td {
+    vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.01);
+    transition: 0.2s ease-in-out;
+    }
+
+    .badge {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 12px;
+    }
+
+    /* Hospital Section */
+    .hospital-section {
+    margin-bottom: 2rem;
+    }
+
+    /* Search Box */
+    .hospital-search {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .hospital-search input {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    flex: 1;
+    transition: border 0.3s ease;
+    }
+
+    .hospital-search input:focus {
+    border-color: #4e54c8;
+    outline: none;
+    }
+
+    .hospital-search button {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    color: #fff;
+    transition: 0.3s;
+    }
+
+    .hospital-search button:hover {
+    background: linear-gradient(135deg, #3d42a6, #6e75e9);
+    }
+
+    /* Hospital Edit Card */
+    .hospital-edit {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    }
+
+    .hospital-edit h4 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #121826;
+    }
+
+    .hospital-edit input {
+    border: 2px solid #eee;
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hospital-edit input:focus {
+    border-color: #4e54c8;
+    box-shadow: 0 0 0 4px rgba(78, 84, 200, 0.15);
+    outline: none;
+    }
+
+    .hospital-edit .btn {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: 0.3s;
+    }
+
+    .hospital-edit .btn:hover {
+    background: linear-gradient(135deg, #3d42a6, #6e75e9);
+    transform: translateY(-2px);
+    }
+
+    /* Tables */
+    .table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .table thead {
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+    color: #fff;
+    text-align: center;
+    }
+
+    .table th, .table td {
+    text-align: center;
+    padding: 12px;
+    vertical-align: middle;
+    }
+
+    .table tbody tr {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: #f9f9ff;
+    }
+
+
+
+
+</style>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar p-3">
+        <div class="topbar mb-3 d-flex align-items-center gap-2">
+            <img src="https://img.icons8.com/color/48/heart-with-pulse.png" alt="logo">
+            <span class="fw-semibold">BloodHub</span>
+        </div>
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item">
+                <a class="nav-link @(fullMode ? "active" : "")"
+                href="@Url.Action("Index","Dashboard", new { mode="full" })">🏠 Dashboard</a>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link @(string.Equals(mode, "users", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                href="@Url.Action("Index", "Dashboard", new { mode = "users" })">
+                    👤 New User Create
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link @(mode == "hospitals" ? "active" : "")"
+                href="@Url.Action("Index", "Dashboard", new { mode = "hospitals" })">
+                    🏥 Hospitals
+                </a>
+            </li>
+
+            <li class="nav-item"><a class="nav-link" href="#">💉 Inventory</a></li>
+            <li class="nav-item">
+                <a class="nav-link @(tableOnly ? "active" : "")"
+                href="@Url.Action("Index","Dashboard", new { mode="table" })">📑 Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(requestsMode ? "active" : "")"
+                href="@Url.Action("Index","Dashboard", new { mode="requests" })">📦 Requests</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(ordersMode ? "active" : "")"
+                href="@Url.Action("Index","Dashboard", new { mode="orders" })">🩸 BloodOrders</a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link @(string.Equals(mode, "alerts", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                href="@Url.Action("Index", "Dashboard", new { mode = "alerts" })">📰 Alerts</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @(string.Equals(mode, "donor", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                href="@Url.Action("Index", "Dashboard", new { mode = "donor" })">
+                    🧑‍🤝‍🧑 BloodDonor Free / Paid Service
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link @(string.Equals(mode, "donordata", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                href="@Url.Action("Index", "Dashboard", new { mode = "donordata" })">
+                    👥 DonorDatas
+                </a>
+            </li>
+
+
+
+
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+        <!-- User Info Bar -->
+        <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded shadow-sm"
+        style="background:#121826; color:#fff; border-radius:12px;">
+
+            <div class="d-flex flex-column">
+                <div class="d-flex align-items-center mb-1">
+                    <i class="bi bi-person-circle me-2 fs-5 text-info"></i>
+                    <span class="fw-bold">User Name:</span> @Context.Session.GetString("Username")
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-clock-history me-2 fs-5 text-warning"></i>
+                    <span class="fw-bold">Logged In Time:</span> @Context.Session.GetString("LoginTime")
+                </div>
+            </div>
+
+            <div>
+                <!-- Home Button -->
+                <a href="@Url.Action("Index","Dashboard", new { mode="full" })"
+                class="btn btn-sm btn-primary me-2 d-flex align-items-center gap-1">
+                    <i class="bi bi-house-door"></i> Home
+                </a>
+                <!-- Logout Button -->
+                <a href="@Url.Action("Logout","Account")"
+                class="btn btn-sm btn-danger d-flex align-items-center gap-1">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </div>
+        @*  @if (!string.IsNullOrEmpty(Model.NotificationText))
+        {
+            <div class="scrolling-text mb-3">
+                <span>@Model.NotificationText</span>
+            </div>
+        } *@
+
+
+
+        @if (!string.IsNullOrEmpty(Model.NotificationText))
+        {
+            <div class="mh-marquee" role="status" aria-live="polite" title="@Model.NotificationText">
+                <div class="mh-marquee__inner">
+                    <span>@Model.NotificationText</span>
+                </div>
+            </div>
+        }
+
+
+
+        @if (ViewBag.GlobalSuccess != null)
+        {
+            <div class="alert alert-success">@ViewBag.GlobalSuccess</div>
+        }
+        @if (ViewBag.GlobalError != null)
+        {
+            <div class="alert alert-danger">@ViewBag.GlobalError</div>
+        }
+
+
+
+
+
+        @if (string.Equals(mode, "donordata", StringComparison.OrdinalIgnoreCase) && !requestsMode && !ordersMode && !tableOnly)
+        {
+            <div class="card card-grad p-3 mb-4">
+                <h4 class="fw-bold mb-3">Search Donors by Hospital</h4>
+                <form method="get" asp-controller="Dashboard" asp-action="Index">
+                    <input type="hidden" name="mode" value="donordata" />
+                    <div class="input-group mb-3">
+                        <input type="number" name="hospitalId" class="form-control" placeholder="Enter Hospital ID" required />
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            @if (Model.Donors != null && Model.Donors.Any())
+            {
+                <div class="card card-grad p-3">
+                    <h4 class="fw-bold mb-3">Donors</h4>
+                    <table class="table table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Donor Name</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>Gender</th>
+                                <th>Address</th>
+                                <th>Hospital ID</th>
+                                <th>Service Type</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var d in Model.Donors.Select((donor, index) => new { donor, index }))
+                            {
+                                <tr>
+                                    <td>@(d.index + 1)</td>
+                                    <td>@d.donor.DonorName</td>
+                                    <td>@d.donor.MobileNumber</td>
+                                    <td>@d.donor.Email</td>
+                                    <td>@d.donor.Gender</td>
+                                    <td>@d.donor.Address</td>
+                                    <td>@d.donor.HospitalId</td>
+                                    <td>
+                                        @if (d.donor.ServiceType?.ToLower() == "paid")
+                                        {
+                                            <span class="badge bg-danger">Paid</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Free</span>
+                                        }
+                                    </td>
+                                    <td>@d.donor.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else if (Model.Donors != null) // searched but no results
+            {
+                <div class="alert alert-warning" role="alert">
+                    ⚠️ No donors found for this hospital.
+                </div>
+            }
+        }
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @if (string.Equals(mode, "users", StringComparison.OrdinalIgnoreCase)
+        && !string.Equals(mode, "donor", StringComparison.OrdinalIgnoreCase)
+        && !requestsMode && !ordersMode && !tableOnly)
+        {
+            <div class="card card-grad p-3 mb-4">
+                <h4 class="fw-bold mb-3">Create / Manage Users</h4>
+
+                <!-- Create User Form -->
+                <form asp-action="SaveUser" asp-controller="Dashboard" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <input type="text" name="Username" class="form-control" placeholder="Username" required />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="password" name="PasswordHash" class="form-control" placeholder="Password" required />
+                        </div>
+                        <div class="col-md-3">
+                            <select name="Role" class="form-select" required>
+                                <option>User</option>
+                                <option>Admin</option>
+                                <option>Nurse</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="email" name="Email" class="form-control" placeholder="Email" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </form>
+            </div>
+
+            <!-- User List -->
+            <div class="card card-grad p-3">
+                <h4 class="fw-bold mb-3">User List</h4>
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Users != null && Model.Users.Any())
+                        {
+                            var idx = 1;
+                            foreach (var u in Model.Users)
+                            {
+                                <tr>
+                                    <td>@idx</td>
+                                    <td>@u.Username</td>
+                                    <td>@u.Role</td>
+                                    <td>@u.Email</td>
+                                    <td>
+                                        <!-- Edit button (open modal) -->
+                                        <button type="button" class="btn btn-sm btn-primary"
+                                                onclick="openEditUserModal(@u.UserId)">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+
+                                        <!-- Delete POST form -->
+                                        <form asp-action="DeleteUser" asp-controller="Dashboard" method="post"
+                                              style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@u.UserId" />
+                                            <button type="submit" class="btn btn-sm btn-danger ms-1"
+                                                    onclick="return confirm('Delete user @u.Username ?');">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                idx++;
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="5" class="text-center text-muted">No users found.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Edit User Modal -->
+            <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form asp-action="UpdateUser" asp-controller="Dashboard" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit User</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="editUserId" name="UserId" />
+                                <div class="mb-3">
+                                    <label>Username</label>
+                                    <input type="text" id="editUsername" name="Username" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label>Password (leave blank to keep current)</label>
+                                    <input type="password" id="editPassword" name="PasswordHash" class="form-control" />
+                                </div>
+                                <div class="mb-3">
+                                    <label>Role</label>
+                                    <select id="editRole" name="Role" class="form-select">
+                                        <option>User</option>
+                                        <option>Admin</option>
+                                        <option>Nurse</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input type="email" id="editEmail" name="Email" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function openEditUserModal(userId) {
+                    fetch('@Url.Action("GetUserJson", "Dashboard")?id=' + userId)
+                        .then(res => res.json())
+                        .then(u => {
+                            document.getElementById('editUserId').value = u.userId;
+                            document.getElementById('editUsername').value = u.username;
+                            document.getElementById('editRole').value = u.role;
+                            document.getElementById('editEmail').value = u.email;
+                            document.getElementById('editPassword').value = '';
+                            new bootstrap.Modal(document.getElementById('editUserModal')).show();
+                        })
+                        .catch(err => alert("Error loading user: " + err));
+                }
+            </script>
+        }
+
+
+
+
+
+
+
+
+
+
+        @* ==== Donor Modal ==== *@
+        @if (string.Equals(mode, "donor", StringComparison.OrdinalIgnoreCase) && !requestsMode && !ordersMode && !tableOnly)
+        {
+            <div class="modal fade" id="donorModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="donorModalForm" asp-action="DonorService" asp-controller="Dashboard" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="modal-header">
+                                <h5 class="modal-title">Register as Blood Donor</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Donor Name</label>
+                                    <input name="DonorName" id="modalDonorName" class="form-control" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Gender</label>
+                                    <select name="Gender" id="modalGender" class="form-select">
+                                        <option value="">-- Select Gender --</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Mobile Number</label>
+                                    <input name="MobileNumber" id="modalMobile" class="form-control" maxlength="10" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input name="Email" id="modalEmail" type="email" class="form-control" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea name="Address" id="modalAddress" class="form-control" rows="2"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Hospital</label>
+                                    <select name="HospitalId" id="modalHospitalId" class="form-select">
+                                        <option value="">-- Select Hospital --</option>
+                                        @if (ViewBag.Hospitals != null)
+                                        {
+                                            foreach (var h in ViewBag.Hospitals as List<BloodHub.Models.Hospital>)
+                                            {
+                                                <option value="@h.Id">@Html.Encode(h.Name) (@Html.Encode(h.City))</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Service Type</label>
+                                    <select name="ServiceType" id="modalServiceType" class="form-select">
+                                        <option value="Free">Free</option>
+                                        <option value="Paid">Paid</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            @* Donor Modal Scripts *@
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            @* Put this script right after the modal markup in Index.cshtml *@
+            <script>
+                (function () {
+                    // ensure bootstrap is available
+                    const donorModalEl = document.getElementById('donorModal');
+                    let donorModal = null;
+                    if (donorModalEl) donorModal = new bootstrap.Modal(donorModalEl);
+
+                    // helper to prefill fields
+                    function prefill(formData) {
+                        if (!formData) return;
+                        try {
+                            document.getElementById('modalDonorName').value = formData.DonorName || '';
+                            document.getElementById('modalGender').value = formData.Gender || '';
+                            document.getElementById('modalMobile').value = formData.MobileNumber || '';
+                            document.getElementById('modalEmail').value = formData.Email || '';
+                            document.getElementById('modalAddress').value = formData.Address || '';
+                            if (formData.HospitalId) document.getElementById('modalHospitalId').value = formData.HospitalId;
+                            document.getElementById('modalServiceType').value = formData.ServiceType || 'Free';
+                        } catch (ex) {
+                            console.warn('Prefill error', ex);
+                        }
+                    }
+
+                    // show modal and optionally show messages
+                    function openAndShow(data) {
+                        if (!donorModal) return;
+                        if (data && data.formData) prefill(data.formData);
+
+                        donorModal.show();
+
+                        // show errors or success message
+                        if (data) {
+                            if (data.success === true) {
+                                // success - show a quick toast/alert then hide modal after 1.5s
+                                const alertDiv = document.createElement('div');
+                                alertDiv.className = 'alert alert-success fixed-top m-3';
+                                alertDiv.style.zIndex = 2000;
+                                alertDiv.textContent = data.message || 'Saved successfully';
+                                document.body.appendChild(alertDiv);
+                                setTimeout(() => {
+                                    donorModal.hide();
+                                    alertDiv.remove();
+                                }, 1300);
+                            } else if (data.errors && data.errors.length) {
+                                // show list of errors above form (create container if not exists)
+                                let errorBox = document.getElementById('donorErrorBox');
+                                if (!errorBox) {
+                                    errorBox = document.createElement('div');
+                                    errorBox.id = 'donorErrorBox';
+                                    errorBox.className = 'alert alert-danger';
+                                    const body = donorModalEl.querySelector('.modal-body');
+                                    body.insertBefore(errorBox, body.firstChild);
+                                }
+                                errorBox.innerHTML = '<ul style="margin:0;padding-left:18px;"></ul>';
+                                const ul = errorBox.querySelector('ul');
+                                data.errors.forEach(e => {
+                                    const li = document.createElement('li');
+                                    // friendly field name if provided
+                                    li.textContent = (e.Field ? e.Field + ': ' : '') + (e.Error || e.ErrorMessage || e.error || '');
+                                    ul.appendChild(li);
+                                });
+                            }
+                        }
+                    }
+
+                    // 1) Auto open when page loads if ?mode=donor (your server side already renders the modal block)
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // if page was visited with mode=donor the modal block exists, show it
+                        const urlParams = new URLSearchParams(window.location.search);
+                        if (urlParams.get('mode') === 'donor') {
+                            if (donorModal) donorModal.show();
+                        }
+
+                        // 2) If server provided donor feedback JSON (via ViewBag), pick it up and act
+                        const fbJson = @Html.Raw(Json.Serialize(ViewBag.DonorFeedbackJson ?? "null"));
+                        try {
+                            const fb = fbJson && fbJson !== 'null' ? JSON.parse(fbJson) : null;
+                            if (fb) {
+                                openAndShow(fb);
+                            }
+                        } catch (err) {
+                            console.warn('Invalid donor feedback JSON', err);
+                        }
+                    });
+
+                    // expose helper so your example buttons still work
+                    window.openDonorModal = function (opts) {
+                        if (!donorModal) donorModal = new bootstrap.Modal(donorModalEl);
+                        if (opts && opts.fullname) document.getElementById('modalDonorName').value = opts.fullname;
+                        if (opts && opts.mobile) document.getElementById('modalMobile').value = opts.mobile;
+                        if (opts && opts.email) document.getElementById('modalEmail').value = opts.email;
+                        if (opts && opts.address) document.getElementById('modalAddress').value = opts.address;
+                        if (opts && opts.hospitalId) document.getElementById('modalHospitalId').value = opts.hospitalId;
+                        if (opts && opts.serviceType) document.getElementById('modalServiceType').value = opts.serviceType;
+                        if (opts && opts.gender) document.getElementById('modalGender').value = opts.gender;
+                        donorModal.show();
+                    };
+                })();
+            </script>
+
+
+            <!-- Example Buttons -->
+            <button type="button"
+                    class="btn btn-sm btn-outline-primary"
+                    onclick="openDonorModal({ hospitalId: 1, serviceType: 'Free' })">
+                Register Donor (Free)
+            </button>
+
+            <button type="button"
+                    class="btn btn-sm btn-outline-warning"
+                    onclick="openDonorModal({ hospitalId: 1, serviceType: 'Paid' })">
+                Register Donor (Paid)
+            </button>
+        }
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @* Alerts editor + recent alerts list (place inside your existing Index view) *@
+        @if (string.Equals(mode, "alerts", StringComparison.OrdinalIgnoreCase) && !requestsMode && !ordersMode && !tableOnly)
+        {
+            <div class="card shadow-sm mb-4 animated-card">
+                <div class="card-header p-3" style="background: linear-gradient(135deg,#4e54c8,#8f94fb); color: white; border-bottom:none;">
+                    <h5 class="mb-0">Create / Update Alert</h5>
+                    <small class="text-white-50">This message will appear in the dashboard top bar.</small>
+                </div>
+
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["Success"]</div>
+                    }
+
+                    <form asp-action="AlertsTextEnter" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Alert Text</label>
+                            <textarea name="Text" class="form-control" rows="5"
+                                      placeholder="Type the alert text here..." required>@(Model?.NotificationText ?? "")</textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">Save Alert</button>
+                            <a href="@Url.Action("Index","Dashboard", new { mode = "full" })" class="btn btn-secondary">Back to Dashboard</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @* Recent Alerts list *@
+            <div class="card card-grad p-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Recent Alerts</h5>
+                    <small class="text-muted">Showing latest alerts (most recent first)</small>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:48px">#</th>
+                                <th>Text</th>
+                                <th style="width:150px">Created By</th>
+                                <th style="width:170px">Created At</th>
+                                <th style="width:100px">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Alerts != null && Model.Alerts.Any())
+                            {
+                                var idx = 1;
+                                foreach (var a in Model.Alerts.OrderByDescending(x => x.CreatedAt))
+                                {
+                                    <tr>
+                                        <td>@idx</td>
+                                        <td style="max-width:600px; white-space:pre-wrap;">@a.Text</td>
+                                        <td>@a.CreatedBy</td>
+                                        <td>@a.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td>
+                                        <td>
+                                            @if (a.IsActive)
+                                            {
+                                                <span class="badge bg-success">Active</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Inactive</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    idx++;
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="5" class="text-center text-muted">No alerts found.</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+
+
+
+
+
+
+        @if (mode == "hospitals" && !requestsMode && !ordersMode && !tableOnly)
+        {
+            <!-- Search Box -->
+            <div class="card card-grad p-3 mb-4">
+                <h4 class="fw-bold mb-3">Search Hospital</h4>
+                <form method="get" asp-controller="Dashboard" asp-action="Index">
+                    <input type="hidden" name="mode" value="hospitals" />
+                    <div class="input-group">
+                        <input type="number" name="hospitalId" class="form-control" placeholder="Enter Hospital ID" required />
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Show only if a hospital is selected -->
+            @if (Model.SelectedHospitalId.HasValue)
+            {
+                var hospital = Model.Hospitals.FirstOrDefault(h => h.Id == Model.SelectedHospitalId.Value);
+
+                if (hospital != null)
+                {
+                    
+                    <!-- Hospital Edit Form -->
+                    <div class="card card-grad p-3 mb-4">
+                        <h4 class="fw-bold mb-1">Hospital Edit</h4>
+                        <p class="daily-edit mb-3">
+                            🔄 Daily Edit – Please update hospital details and blood stock daily.
+                        </p>
+
+
+                        <form method="post" asp-action="UpdateHospital" asp-controller="Dashboard">
+                            <input type="hidden" name="Id" value="@hospital.Id" />
+
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Hospital Name</label>
+                                    <input type="text" name="Name" class="form-control" value="@hospital.Name" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" name="Email" class="form-control" value="@hospital.Email" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" name="Phone" class="form-control" value="@hospital.Phone" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">City</label>
+                                    <input type="text" name="City" class="form-control" value="@hospital.City" />
+                                </div>
+                            </div>
+
+                            <h5 class="mt-3">Blood Stock (Daily Update)</h5>
+                            <div class="row mb-2">
+                                <div class="col"><input type="number" name="Stock.APos" class="form-control" value="@hospital.Stock?.APos" /> A+</div>
+                                <div class="col"><input type="number" name="Stock.ANeg" class="form-control" value="@hospital.Stock?.ANeg" /> A-</div>
+                                <div class="col"><input type="number" name="Stock.BPos" class="form-control" value="@hospital.Stock?.BPos" /> B+</div>
+                                <div class="col"><input type="number" name="Stock.BNeg" class="form-control" value="@hospital.Stock?.BNeg" /> B-</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col"><input type="number" name="Stock.OPos" class="form-control" value="@hospital.Stock?.OPos" /> O+</div>
+                                <div class="col"><input type="number" name="Stock.ONeg" class="form-control" value="@hospital.Stock?.ONeg" /> O-</div>
+                                <div class="col"><input type="number" name="Stock.ABPos" class="form-control" value="@hospital.Stock?.ABPos" /> AB+</div>
+                                <div class="col"><input type="number" name="Stock.ABNeg" class="form-control" value="@hospital.Stock?.ABNeg" /> AB-</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success mt-3 w-100">Save Changes</button>
+                        </form>
+                    </div>
+
+
+                    <!-- Single Hospital Inventory Table -->
+                    <div class="card card-grad p-3 mb-4">
+                        <h4 class="fw-bold mb-3">Hospital Inventory Report</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Hospital</th>
+                                    <th>City</th>
+                                    <th>A+</th>
+                                    <th>A-</th>
+                                    <th>B+</th>
+                                    <th>B-</th>
+                                    <th>O+</th>
+                                    <th>O-</th>
+                                    <th>AB+</th>
+                                    <th>AB-</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@hospital.Name <br /><small>@hospital.Email • @hospital.Phone</small></td>
+                                    <td>@hospital.City</td>
+                                    <td>@hospital.Stock?.APos</td>
+                                    <td>@hospital.Stock?.ANeg</td>
+                                    <td>@hospital.Stock?.BPos</td>
+                                    <td>@hospital.Stock?.BNeg</td>
+                                    <td>@hospital.Stock?.OPos</td>
+                                    <td>@hospital.Stock?.ONeg</td>
+                                    <td>@hospital.Stock?.ABPos</td>
+                                    <td>@hospital.Stock?.ABNeg</td>
+                                    <td><b>@hospital.Stock?.Total</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Requests Table for Selected Hospital -->
+                    <div class="card card-grad p-3">
+                        <h4 class="fw-bold mb-3">Hospital New Requests</h4>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Blood Group</th>
+                                    <th>Units</th>
+                                    <th>Person</th>
+                                    <th>Mobile</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Requested At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model.Requests.Where(r => r.HospitalId == hospital.Id))
+                                {
+                                    <tr>
+                                        <td>@r.BloodGroup</td>
+                                        <td>@r.Units</td>
+                                        <td>@r.PersonName</td>
+                                        <td>@r.MobileNumber</td>
+                                        <td>@r.Address</td>
+                                        <td>@r.Status</td>
+                                        <td>@r.RequestedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            }
+        }
+
+
+     
+        <!-- Requests Page -->
+        @if (requestsMode && !ordersMode && !tableOnly)
+        {
+            <div class="card card-grad p-3 mb-4">
+                <h4 class="fw-bold mb-3">Create New Blood Request</h4>
+                <form method="post" asp-action="SaveRequest" asp-controller="Dashboard">
+
+                    <!-- Hospital -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Hospital</label>
+                        <select class="form-select" name="HospitalId" required>
+                            @foreach (var h in Model.Hospitals)
+                            {
+                                <option value="@h.Id">@h.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Blood Group -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Blood Group</label>
+                        <select class="form-select" name="BloodGroup" required>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                        </select>
+                    </div>
+
+                    <!-- Units -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Units</label>
+                        <input type="number" name="Units" class="form-control" min="1" value="1" required />
+                    </div>
+
+                    <!-- Person Name -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Person Name</label>
+                        <input type="text" name="PersonName" class="form-control" placeholder="Enter person name" required />
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Mobile Number</label>
+                        <input type="tel" name="MobileNumber" class="form-control" placeholder="Enter mobile number"
+                               pattern="[0-9]{10}" maxlength="10" required />
+                        <small class="text-muted">Enter 10-digit mobile number</small>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Address</label>
+                        <textarea name="Address" class="form-control" rows="3" placeholder="Enter full address" required></textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary w-100">Save Request</button>
+                </form>
+            </div>
+        }
+
+@* 
+        <!-- Orders Page -->
+        @if (ordersMode && !requestsMode && !tableOnly)
+        {
+            <div class="card card-grad p-3">
+                <h4 class="fw-bold mb-3">Hospital Requests</h4>
+                <table id="requestsTable" class="table table-bordered table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Hospital</th>
+                            <th>Blood Group</th>
+                            <th>Units</th>
+                            <th>Person Name</th>
+                            <th>Mobile</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Requested At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.Requests.Select((req, index) => new { req, index }))
+                        {
+                            <tr>
+                                <td>@(r.index + 1)</td>
+                                <td>@r.req.Hospital.Name</td>
+                                <td>@r.req.BloodGroup</td>
+                                <td>@r.req.Units</td>
+                                <td>@r.req.PersonName</td>
+                                <td>@r.req.MobileNumber</td>
+                                <td>@r.req.Address</td>
+                                <td>
+                                    @if (r.req.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (r.req.Status == "Approved")
+                                    {
+                                        <span class="badge bg-success">Approved</span>
+                                    }
+                                    else if (r.req.Status == "Rejected")
+                                    {
+                                        <span class="badge bg-danger">Rejected</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@r.req.Status</span>
+                                    }
+                                </td>
+                                <td>@r.req.RequestedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                <td>
+                                    <a href="@Url.Action("EditRequest", "Dashboard", new { id = r.req.Id })" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="@Url.Action("DeleteRequest", "Dashboard", new { id = r.req.Id })" class="btn btn-sm btn-danger ms-1">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } *@
+
+
+
+
+
+        <!-- Orders Page (inline edit/delete with modal) -->
+        @if (ordersMode && !requestsMode && !tableOnly)
+        {
+            <div class="card card-grad p-3">
+                <h4 class="fw-bold mb-3">Hospital Requests</h4>
+                <table id="requestsTable" class="table table-bordered table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Hospital</th>
+                            <th>Blood Group</th>
+                            <th>Units</th>
+                            <th>Person Name</th>
+                            <th>Mobile</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Requested At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model.Requests.Select((req, index) => new { req, index }))
+                        {
+                            <tr>
+                                <td>@(r.index + 1)</td>
+                                <td>@r.req.Hospital?.Name</td>
+                                <td>@r.req.BloodGroup</td>
+                                <td>@r.req.Units</td>
+                                <td>@r.req.PersonName</td>
+                                <td>@r.req.MobileNumber</td>
+                                <td>@r.req.Address</td>
+                                <td>
+                                    @if (r.req.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (r.req.Status == "Approved")
+                                    {
+                                        <span class="badge bg-success">Approved</span>
+                                    }
+                                    else if (r.req.Status == "Rejected")
+                                    {
+                                        <span class="badge bg-danger">Rejected</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@r.req.Status</span>
+                                    }
+                                </td>
+                                <td>@r.req.RequestedAt.ToString("dd MMM yyyy HH:mm")</td>
+                                <td>
+                                    <!-- Edit opens modal (same-page) -->
+                                    <button type="button" class="btn btn-sm btn-primary"
+                                            onclick="openEditRequestModal(@r.req.Id)">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+
+                                    <!-- Delete uses POST (stays on same page) -->
+                                    <form asp-action="DeleteRequest" asp-controller="Dashboard" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@r.req.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger ms-1"
+                                                onclick="return confirm('Delete request for @r.req.PersonName ( @r.req.BloodGroup ) ?');">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Edit Request Modal -->
+            <div class="modal fade" id="editRequestModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <form asp-action="UpdateRequest" asp-controller="Dashboard" method="post">
+                            @Html.AntiForgeryToken()
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Hospital Request</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <input type="hidden" id="editRequestId" name="Id" />
+
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Hospital</label>
+                                        <select id="editHospitalId" name="HospitalId" class="form-select" required>
+                                            <option value="">-- Select Hospital --</option>
+                                            @if (ViewBag.Hospitals != null)
+                                            {
+                                                foreach (var h in ViewBag.Hospitals as List<BloodHub.Models.Hospital>)
+                                                {
+                                                    <option value="@h.Id">@h.Name (@h.City)</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Blood Group</label>
+                                        <select id="editBloodGroup" name="BloodGroup" class="form-select" required>
+                                            <option>A+</option>
+                                            <option>A-</option>
+                                            <option>B+</option>
+                                            <option>B-</option>
+                                            <option>O+</option>
+                                            <option>O-</option>
+                                            <option>AB+</option>
+                                            <option>AB-</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="form-label">Units</label>
+                                        <input id="editUnits" name="Units" type="number" min="1" class="form-control" required />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Person Name</label>
+                                        <input id="editPersonName" name="PersonName" class="form-control" required />
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Mobile Number</label>
+                                        <input id="editMobileNumber" name="MobileNumber" class="form-control" maxlength="10" />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label">Address</label>
+                                        <textarea id="editAddress" name="Address" class="form-control" rows="2"></textarea>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Status</label>
+                                        <select id="editStatus" name="Status" class="form-select">
+                                            <option>Pending</option>
+                                            <option>Approved</option>
+                                            <option>Rejected</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Requested At</label>
+                                        <input id="editRequestedAt" name="RequestedAt" type="datetime-local" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toLocalDateTimeForInput(dtString) {
+                    // converts DateTime string (server) to local input value (yyyy-MM-ddTHH:mm)
+                    if (!dtString) return '';
+                    const d = new Date(dtString);
+                    const pad = n => n.toString().padStart(2, '0');
+                    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+                }
+
+                function openEditRequestModal(requestId) {
+                    fetch('@Url.Action("GetRequestJson", "Dashboard")?id=' + requestId)
+                        .then(res => {
+                            if (!res.ok) throw new Error('Status ' + res.status);
+                            return res.json();
+                        })
+                        .then(r => {
+                            document.getElementById('editRequestId').value = r.id;
+                            document.getElementById('editHospitalId').value = r.hospitalId || '';
+                            document.getElementById('editBloodGroup').value = r.bloodGroup || '';
+                            document.getElementById('editUnits').value = r.units || 1;
+                            document.getElementById('editPersonName').value = r.personName || '';
+                            document.getElementById('editMobileNumber').value = r.mobileNumber || '';
+                            document.getElementById('editAddress').value = r.address || '';
+                            document.getElementById('editStatus').value = r.status || 'Pending';
+
+                            // convert server Date to input-local format
+                            document.getElementById('editRequestedAt').value = r.requestedAt ? toLocalDateTimeForInput(r.requestedAt) : '';
+
+                            // show modal
+                            new bootstrap.Modal(document.getElementById('editRequestModal')).show();
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            alert('Failed to load request: ' + err);
+                        });
+                }
+            </script>
+        }
+
+
+ <div class="card card-grad p-3">
+                <h4 class="fw-bold mb-3">Hospital Requests</h4>
+                <table class="table animated-table align-middle">
+          
+
+        <!-- Reports (Table Only) -->
+                @if (tableOnly && !requestsMode && !ordersMode)
+                {
+                   
+
+                    <div class="card card-grad p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <div class="animated-report-header">
+                                    Hospital Inventory Report
+                                    <span class="underline"></span>
+                                </div>
+                                <div class="text-muted small mt-2">A quick export of current stock by hospital</div>
+                            </div>
+
+                            <div class="export-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="exportTableToExcel()">
+                                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Excel
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="exportTableToPdf()">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="inventoryTableWrapper">
+                            <div class="table-responsive">
+                                <table id="inventoryTable" class="table align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Hospital</th>
+                                            <th>City</th>
+                                            <th class="text-center">A+</th>
+                                            <th class="text-center">A-</th>
+                                            <th class="text-center">B+</th>
+                                            <th class="text-center">B-</th>
+                                            <th class="text-center">O+</th>
+                                            <th class="text-center">O-</th>
+                                            <th class="text-center">AB+</th>
+                                            <th class="text-center">AB-</th>
+                                            <th class="text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var h in Model.Hospitals)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <div class="fw-bold">@h.Name</div>
+                                                    <div class="text-muted small">@h.Email • @h.Phone</div>
+                                                </td>
+                                                <td>@h.City</td>
+                                                <td class="text-center">@h.Stock!.APos</td>
+                                                <td class="text-center">@h.Stock!.ANeg</td>
+                                                <td class="text-center">@h.Stock!.BPos</td>
+                                                <td class="text-center">@h.Stock!.BNeg</td>
+                                                <td class="text-center">@h.Stock!.OPos</td>
+                                                <td class="text-center">@h.Stock!.ONeg</td>
+                                                <td class="text-center">@h.Stock!.ABPos</td>
+                                                <td class="text-center">@h.Stock!.ABNeg</td>
+                                                <td class="text-center fw-bold">@h.Stock!.Total</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scripts: SheetJS (Excel), html2canvas + jsPDF (PDF) -->
+                    <script>
+                        /* Improved exportTableToPdf - fits width & splits pages reliably */
+                        async function exportTableToPdf() {
+                          const wrapper = document.getElementById('inventoryTableWrapper');
+                          if (!wrapper) return alert('Table wrapper not found.');
+
+                          try {
+                            // wait a tick so any pending rendering finishes
+                            await new Promise(r => setTimeout(r, 120));
+
+                            // clone wrapper for export (keeps original untouched)
+                            const clone = wrapper.cloneNode(true);
+                            clone.style.width = 'auto';
+                            clone.style.maxWidth = 'none';
+                            clone.style.boxShadow = 'none';
+                            clone.style.transform = 'none';
+                            clone.classList.remove('no-anim');
+
+                            // small container so html2canvas captures cleanly
+                            const exportContainer = document.createElement('div');
+                            exportContainer.style.position = 'fixed';
+                            exportContainer.style.left = '-9999px';
+                            exportContainer.style.top = '0';
+                            exportContainer.style.background = '#fff';
+                            exportContainer.style.padding = '14px';
+                            exportContainer.appendChild(clone);
+                            document.body.appendChild(exportContainer);
+
+                            // inline computed styles to avoid missing fonts/spacing
+                            const applyInline = (root) => {
+                              const props = ['font-family','font-size','font-weight','color','background-color','padding','margin','border','border-radius','box-shadow','text-align','line-height','width','display','vertical-align','white-space','word-break','box-sizing'];
+                              root.querySelectorAll('*').forEach(el => {
+                                try {
+                                  const cs = getComputedStyle(el);
+                                  let s = el.getAttribute('style') || '';
+                                  props.forEach(p => {
+                                    const v = cs.getPropertyValue(p);
+                                    if (v && v !== '0px' && v !== 'normal' && v !== 'rgba(0, 0, 0, 0)' && v !== 'transparent') {
+                                      s += `${p}:${v};`;
+                                    }
+                                  });
+                                  el.setAttribute('style', s);
+                                } catch(e){}
+                              });
+                            };
+                            applyInline(exportContainer);
+
+                            // Use html2canvas to render the clone
+                            const scale = Math.min(2, window.devicePixelRatio || 1.5);
+                            const canvas = await html2canvas(exportContainer, {
+                              scale: scale,
+                              useCORS: true,
+                              backgroundColor: '#ffffff',
+                              scrollX: 0,
+                              scrollY: -window.scrollY
+                            });
+
+                            // Prepare jsPDF
+                            const { jsPDF } = window.jspdf;
+                            // Decide orientation: landscape when the table is wide
+                            const preferLandscape = canvas.width > canvas.height && (canvas.width / canvas.height) > 1.2;
+                            const pdf = new jsPDF(preferLandscape ? 'l' : 'p', 'pt', 'a4');
+
+                            const pdfPageW = pdf.internal.pageSize.getWidth();
+                            const pdfPageH = pdf.internal.pageSize.getHeight();
+
+                            // Scale canvas image to fit PDF page width
+                            const imgWidthPx = canvas.width;
+                            const imgHeightPx = canvas.height;
+                            const pxPerPt = imgWidthPx / pdfPageW;
+                            const pageHeightPx = Math.floor(pdfPageH * pxPerPt);
+
+                            // If image height fits one page
+                            if (imgHeightPx <= pageHeightPx) {
+                              const imgData = canvas.toDataURL('image/png');
+                              pdf.addImage(imgData, 'PNG', 0, 0, pdfPageW, imgHeightPx / pxPerPt);
+                              pdf.save('Hospital_Inventory_' + (new Date()).toISOString().slice(0,10) + '.pdf');
+                              exportContainer.remove();
+                              return;
+                            }
+
+                            // Multi-page slicing
+                            const totalPages = Math.ceil(imgHeightPx / pageHeightPx);
+                            for (let p = 0; p < totalPages; p++) {
+                              const sliceH = (p === totalPages - 1) ? (imgHeightPx - p * pageHeightPx) : pageHeightPx;
+                              const pageCanvas = document.createElement('canvas');
+                              pageCanvas.width = imgWidthPx;
+                              pageCanvas.height = sliceH;
+                              const ctx = pageCanvas.getContext('2d');
+                              ctx.drawImage(canvas, 0, p * pageHeightPx, imgWidthPx, sliceH, 0, 0, imgWidthPx, sliceH);
+
+                              const imgData = pageCanvas.toDataURL('image/png');
+                              const imgHInPdf = sliceH / pxPerPt;
+
+                              if (p > 0) pdf.addPage();
+                              pdf.addImage(imgData, 'PNG', 0, 0, pdfPageW, imgHInPdf);
+                            }
+
+                            pdf.save('Hospital_Inventory_' + (new Date()).toISOString().slice(0,10) + '.pdf');
+                            exportContainer.remove();
+                          } catch (err) {
+                            console.error('PDF export error', err);
+                            alert('PDF export failed: ' + (err && err.message ? err.message : err));
+                          }
+                        }
+                    </script>
+
+                }
+
+
+        <!-- Dashboard Page -->
+        @if (fullMode && !requestsMode && !ordersMode && !tableOnly)
+        {
+            <h3 class="fw-bold mb-3">Dashboard</h3>
+
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-1 p-3"><div>Hospitals</div><div class="fs-2 fw-bold">@Model.TotalHospitals</div></div></div>
+                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-2 p-3"><div>Total Units</div><div class="fs-2 fw-bold">@Model.TotalUnits</div></div></div>
+                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-3 p-3"><div>Low-Stock Alerts</div><div class="fs-2 fw-bold">@Model.LowStockHospitals</div></div></div>
+                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-4 p-3"><div>Pending Requests</div><div class="fs-2 fw-bold">@Model.PendingRequests</div></div></div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-lg-8">
+                    <div class="card card-grad p-3">
+                        <div class="fw-semibold mb-2">Donations Trend (7 days)</div>
+                        <canvas id="lineChart" height="130"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card card-grad p-3">
+                        <div class="fw-semibold mb-2">Stock by Blood Group</div>
+                        <canvas id="barChart" height="210"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-grad p-3">
+                <h4 class="fw-bold mb-3">Hospital Inventory</h4>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Hospital</th>
+                                <th>City</th>
+                                <th class="text-center">A+</th>
+                                <th class="text-center">A-</th>
+                                <th class="text-center">B+</th>
+                                <th class="text-center">B-</th>
+                                <th class="text-center">O+</th>
+                                <th class="text-center">O-</th>
+                                <th class="text-center">AB+</th>
+                                <th class="text-center">AB-</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in Model.Hospitals)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@h.Name</div>
+                                        <div class="text-muted small">@h.Email • @h.Phone</div>
+                                    </td>
+                                    <td>@h.City</td>
+                                    <td class="text-center">@h.Stock!.APos</td>
+                                    <td class="text-center">@h.Stock!.ANeg</td>
+                                    <td class="text-center">@h.Stock!.BPos</td>
+                                    <td class="text-center">@h.Stock!.BNeg</td>
+                                    <td class="text-center">@h.Stock!.OPos</td>
+                                    <td class="text-center">@h.Stock!.ONeg</td>
+                                    <td class="text-center">@h.Stock!.ABPos</td>
+                                    <td class="text-center">@h.Stock!.ABNeg</td>
+                                    <td class="text-center fw-bold">@h.Stock!.Total</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (fullMode && !requestsMode && !ordersMode && !tableOnly)
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+    <script>
+        const C = getComputedStyle(document.documentElement);
+        const colors = [
+            C.getPropertyValue('--Apos').trim(), C.getPropertyValue('--Aneg').trim(),
+            C.getPropertyValue('--Bpos').trim(), C.getPropertyValue('--Bneg').trim(),
+            C.getPropertyValue('--Opos').trim(), C.getPropertyValue('--Oneg').trim(),
+            C.getPropertyValue('--ABpos').trim(), C.getPropertyValue('--ABneg').trim()
+        ];
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Days)),
+                datasets: [{
+                    label: 'Donations',
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DonationsPerDay)),
+                    borderColor: '#4e54c8', backgroundColor: 'rgba(78,84,200,.15)', fill: true, tension: .35, pointRadius: 3
+                }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: ['A+','A-','B+','B-','O+','O-','AB+','AB-'],
+                datasets: [{
+                    data: [@Model.APos,@Model.ANeg,@Model.BPos,@Model.BNeg,@Model.OPos,@Model.ONeg,@Model.ABPos,@Model.ABNeg],
+                    backgroundColor: colors, borderRadius: 8
+                }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+}

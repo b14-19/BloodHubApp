@@ -1,0 +1,117 @@
+﻿@model BloodHub.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BloodHub • Login</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Page styles -->
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="topbar">
+        <div class="brand">
+            <img src="https://img.icons8.com/color/48/heart-with-pulse.png" alt="logo">
+            <span>BloodHub</span>
+        </div>
+
+        <div class="hello-wrapper">
+            <div class="character">
+                <span class="character">👩‍⚕️</span>
+            </div>
+            <div class="speech">
+                Hello, I am Sonu.
+            </div>
+        </div>
+
+        <!-- Animated Welcome Text -->
+        <p class="welcome-text">
+            👋 Well come to the BloodHub. Please enter your login details correctly.
+        </p>
+
+        <button class="lang-pill">English (EN)</button>
+    </div>
+
+    <!-- Card -->
+    <div class="auth-card">
+        <!-- Login (left panel) -->
+        <section class="panel">
+            <h2>Sign In</h2>
+
+            <form asp-controller="Account" asp-action="Login" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="text-danger" style="margin:6px 0"></div>
+
+                <div class="fg">
+                    <label asp-for="Username">Username</label>
+                    <input asp-for="Username" placeholder="Enter username" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="fg">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" placeholder="Enter password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <!-- ✅ Remember me + Forgot password -->
+                <div class="row d-flex justify-content-between align-items-center">
+                    <label>
+                        <input asp-for="Remember" /> Remember me
+                    </label>
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="text-primary">
+                        Forgot Password?
+                    </a>
+                </div>
+
+                <button type="submit" class="btn">Log In</button>
+
+                <!-- ✅ Register link -->
+                <div class="links">
+                    <a asp-controller="Account" asp-action="Register">Create Account</a>
+                </div>
+
+                <!-- Social sign in -->
+                <div class="social-wrap" aria-label="Social sign in links">
+                    <span class="label">Or continue with</span>
+                    <a class="social fb" href="https://www.facebook.com/login/" target="_blank" rel="noopener">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a class="social tw" href="https://x.com/i/flow/login" target="_blank" rel="noopener">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+                    <a class="social g" href="https://accounts.google.com/" target="_blank" rel="noopener">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a class="social ig" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </form>
+
+            @section Scripts {
+                <partial name="_ValidationScriptsPartial" />
+            }
+        </section>
+
+        <!-- Hero (right panel) -->
+        <section class="hero">
+            <div class="shape s1"></div>
+            <div class="shape s2"></div>
+            <div class="shape s3"></div>
+            <img class="doctor" src="~/images/doctors.png" alt="Doctor">
+        </section>
+    </div>
+</body>
+</html>

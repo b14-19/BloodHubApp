@@ -1,0 +1,225 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model BloodHub.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+
+<style>
+    :root {
+        --Apos: #6C5CE7;
+        --Aneg: #A78BFA;
+        --Bpos: #00B894;
+        --Bneg: #00CEC9;
+        --Opos: #FDCB6E;
+        --Oneg: #E17055;
+        --ABpos: #FF7675;
+        --ABneg: #74B9FF;
+    }
+
+    body {
+        background: linear-gradient(120deg,#e0e9ff,#ffe0f3,#fff1d6);
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        background: #121826;
+        color: #fff;
+        min-height: 130vh;
+    }
+
+        .sidebar .nav-link {
+            color: #d1d5db;
+        }
+
+            .sidebar .nav-link.active, .sidebar .nav-link:hover {
+                color: #fff;
+                background: #1f2937;
+                border-radius: 10px;
+            }
+
+    .card-grad {
+        border: 0;
+        color: #0b0f1a;
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    }
+
+    .grad-1 {
+        background: linear-gradient(135deg,#a18cd1,#fbc2eb);
+    }
+
+    .grad-2 {
+        background: linear-gradient(135deg,#96fbc4,#f9f586);
+    }
+
+    .grad-3 {
+        background: linear-gradient(135deg,#ffd3a5,#fd6585);
+    }
+
+    .grad-4 {
+        background: linear-gradient(135deg,#74ebd5,#acb6e5);
+    }
+
+    .badge-chip {
+        border-radius: 10px;
+        font-weight: 700;
+        padding: .25rem .5rem;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-12 col-md-2 sidebar p-3">
+            <h4 class="mb-4">BloodHub</h4>
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item"><a class="nav-link active" href="#">🏠 Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">🏥 Hospitals</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">💉 Inventory</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">📦 Requests</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">📑 Reports</a></li>
+                
+            </ul>
+        </div>
+
+        <!-- Main -->
+        <div class="col-12 col-md-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="fw-bold m-0">Dashboard</h3>
+                <button class="btn btn-dark">New Request</button>
+            </div>
+
+            <!-- KPIs -->
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-grad grad-1 p-3">
+                        <div>Hospitals</div><div class="fs-2 fw-bold">@Model.TotalHospitals</div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-grad grad-2 p-3">
+                        <div>Total Units</div><div class="fs-2 fw-bold">@Model.TotalUnits</div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-grad grad-3 p-3">
+                        <div>Low-Stock Alerts</div><div class="fs-2 fw-bold">@Model.LowStockHospitals</div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card card-grad grad-4 p-3">
+                        <div>Pending Requests</div><div class="fs-2 fw-bold">@Model.PendingRequests</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-8">
+                    <div class="card card-grad p-3">
+                        <div class="fw-semibold mb-2">Donations Trend (7 days)</div>
+                        <canvas id="lineChart" height="130"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card card-grad p-3">
+                        <div class="fw-semibold mb-2">Stock by Blood Group</div>
+                        <canvas id="barChart" height="210"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="card card-grad p-3">
+                <div class="fw-semibold mb-2">Hospital Inventory</div>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Hospital</th>
+                                <th>City</th>
+                                <th class="text-center">A+</th>
+                                <th class="text-center">A-</th>
+                                <th class="text-center">B+</th>
+                                <th class="text-center">B-</th>
+                                <th class="text-center">O+</th>
+                                <th class="text-center">O-</th>
+                                <th class="text-center">AB+</th>
+                                <th class="text-center">AB-</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in Model.Hospitals)
+                            {
+                                Func<int, string> color = v => v <= 5 ? "bg-danger-subtle text-danger" : (v <= 10 ? "bg-warning-subtle text-warning" : "bg-success-subtle text-success");
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@h.Name</div>
+                                        <div class="text-muted small">@h.Email • @h.Phone</div>
+                                    </td>
+                                    <td>@h.City</td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.APos)" style="background:color-mix(in srgb, var(--Apos) 20%, #fff); color:var(--Apos)">@h.Stock!.APos</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.ANeg)" style="background:color-mix(in srgb, var(--Aneg) 20%, #fff); color:var(--Aneg)">@h.Stock!.ANeg</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.BPos)" style="background:color-mix(in srgb, var(--Bpos) 20%, #fff); color:var(--Bpos)">@h.Stock!.BPos</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.BNeg)" style="background:color-mix(in srgb, var(--Bneg) 20%, #fff); color:var(--Bneg)">@h.Stock!.BNeg</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.OPos)" style="background:color-mix(in srgb, var(--Opos) 20%, #fff); color:var(--Opos)">@h.Stock!.OPos</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.ONeg)" style="background:color-mix(in srgb, var(--Oneg) 20%, #fff); color:var(--Oneg)">@h.Stock!.ONeg</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.ABPos)" style="background:color-mix(in srgb, var(--ABpos) 20%, #fff); color:var(--ABpos)">@h.Stock!.ABPos</span></td>
+                                    <td class="text-center"><span class="badge-chip @color(h.Stock!.ABNeg)" style="background:color-mix(in srgb, var(--ABneg) 20%, #fff); color:var(--ABneg)">@h.Stock!.ABNeg</span></td>
+                                    <td class="text-center fw-bold">@h.Stock!.Total</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Colors
+    const C = getComputedStyle(document.documentElement);
+    const colors = [
+      C.getPropertyValue('--Apos').trim(), C.getPropertyValue('--Aneg').trim(),
+      C.getPropertyValue('--Bpos').trim(), C.getPropertyValue('--Bneg').trim(),
+      C.getPropertyValue('--Opos').trim(), C.getPropertyValue('--Oneg').trim(),
+      C.getPropertyValue('--ABpos').trim(), C.getPropertyValue('--ABneg').trim()
+    ];
+
+    // Line chart (7 days)
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Days)),
+        datasets: [{
+          label: 'Donations',
+          data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DonationsPerDay)),
+          borderColor: '#4e54c8', backgroundColor: 'rgba(78,84,200,.15)',
+          fill: true, tension: .35, pointRadius: 3
+        }]
+      },
+      options: { plugins:{legend:{display:false}}, scales:{ y:{ beginAtZero:true }} }
+    });
+
+    // Bar chart (current stock by group)
+    new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: {
+        labels: ['A+','A-','B+','B-','O+','O-','AB+','AB-'],
+        datasets: [{
+          data: [@Model.APos,@Model.ANeg,@Model.BPos,@Model.BNeg,@Model.OPos,@Model.ONeg,@Model.ABPos,@Model.ABNeg],
+          backgroundColor: colors, borderRadius: 8
+        }]
+      },
+      options: { plugins:{legend:{display:false}}, scales:{ y:{ beginAtZero:true } } }
+    });
+</script>

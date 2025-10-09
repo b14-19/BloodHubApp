@@ -1,0 +1,634 @@
+﻿html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+
+
+
+:root {
+    --primary: #4e54c8;
+    --primary-2: #8f94fb;
+    --accent: #ffa62b;
+    --ink: #0b0f1a;
+    --muted: #5b6470;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins',sans-serif
+}
+
+/* ==== Animated background (same vibe) ==== */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(-45deg,#4e54c8,#8f94fb,#1dd1a1,#ff6b6b);
+    background-size: 400% 400%;
+    animation: gradientBG 14s ease infinite;
+    color: #0f172a;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+/* ==== Top bar (logo + language) ==== */
+.topbar {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+    .brand img {
+        height: 36px;
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,.25))
+    }
+
+    .brand span {
+        font-weight: 600;
+        font-size: 20px
+    }
+
+.lang-pill {
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25)
+}
+
+/* ==== Card layout (login + hero) ==== */
+.auth-card {
+    max-width: 1100px;
+    margin: 36px auto 60px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 28px;
+}
+
+@media (max-width:992px) {
+    .auth-card {
+        grid-template-columns: 1fr
+    }
+}
+
+/* Left: Login panel */
+.panel {
+    background: #ffffffcc;
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    animation: fadeSlide .8s ease both;
+}
+
+    .panel h2 {
+        font-size: 28px;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 22px;
+        color: #1a1a1a
+    }
+
+.fg {
+    margin-bottom: 18px
+}
+
+    .fg label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #394150
+    }
+
+    .fg input {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #d9dee6;
+        border-radius: 10px;
+        background: #111;
+        color: #f8fafc;
+        transition: .25s;
+    }
+
+        .fg input::placeholder {
+            color: #b8c0cc
+        }
+
+        .fg input:focus {
+            border-color: #5b7cff;
+            box-shadow: 0 0 0 4px rgba(91,124,255,.15);
+            outline: 0
+        }
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 6px 0 2px
+}
+
+    .row label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #394150;
+        font-size: 14px;
+        cursor: pointer
+    }
+
+    .row a {
+        font-size: 14px;
+        text-decoration: none;
+        color: #4e54c8
+    }
+
+        .row a:hover {
+            text-decoration: underline
+        }
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 10px;
+    margin-top: 10px;
+    background: linear-gradient(90deg,#48dbfb,#4e54c8);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(78,84,200,.35);
+    transition: .25s;
+}
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 32px rgba(78,84,200,.45)
+    }
+
+.links {
+    margin-top: 14px;
+    text-align: center
+}
+
+    .links a {
+        margin: 0 10px;
+        color: #4e54c8;
+        text-decoration: none;
+        font-size: 14px
+    }
+
+        .links a:hover {
+            text-decoration: underline
+        }
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+/* Right: Hero with doctor + shapes + badges */
+.hero {
+    position: relative;
+    min-height: 520px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,.35);
+    background: linear-gradient(140deg,#0e1a2b 0%, #0a2540 60%, #0b3d5e 100%);
+    animation: fadeSlide .9s .1s ease both;
+}
+
+.shape {
+    position: absolute;
+    border-radius: 28px;
+    opacity: .95
+}
+
+.s1 {
+    width: 340px;
+    height: 340px;
+    background: #f7a600;
+    top: 110px;
+    left: 80px;
+    transform: rotate(18deg);
+    animation: floatY 8s ease-in-out infinite
+}
+
+.s2 {
+    width: 520px;
+    height: 520px;
+    background: #113a8f;
+    top: -140px;
+    right: -160px;
+    border-radius: 40px;
+    animation: floatY 10s -2s ease-in-out infinite
+}
+
+.s3 {
+    width: 260px;
+    height: 260px;
+    background: #18c1ff;
+    bottom: -70px;
+    left: -70px;
+    border-radius: 50%;
+    animation: floatY 9s -1s ease-in-out infinite
+}
+
+@keyframes floatY {
+    0%,100% {
+        transform: translateY(0) rotate(0)
+    }
+
+    50% {
+        transform: translateY(-14px) rotate(2deg)
+    }
+}
+
+.doctor {
+    position: absolute;
+    right: 58px;
+    bottom: 0;
+    width: 410px;
+    max-width: 48%;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 32px rgba(0,0,0,.45));
+    animation: floatY 6s ease-in-out infinite;
+}
+
+@media (max-width:992px) {
+    .doctor {
+        position: relative;
+        right: auto;
+        margin: 40px auto 0;
+        display: block;
+        max-width: 70%
+    }
+}
+
+.badge {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: #0f172a;
+    border-radius: 14px;
+    padding: 10px 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    font-size: 13px
+}
+
+    .badge .muted {
+        font-size: 12px;
+        color: #475569
+    }
+
+.customers {
+    top: 150px;
+    right: 48px
+}
+
+.connect {
+    bottom: 26px;
+    left: 26px
+}
+
+.faces {
+    display: flex;
+    gap: 6px
+}
+
+.dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    box-shadow: 0 0 0 2px #fff inset
+}
+
+    .dot:nth-child(1) {
+        background: #60a5fa
+    }
+
+    .dot:nth-child(2) {
+        background: #fda4af
+    }
+
+    .dot:nth-child(3) {
+        background: #86efac
+    }
+
+    .dot:nth-child(4) {
+        background: #fde047
+    }
+
+.social-wrap {
+    margin-top: 16px;
+    text-align: center;
+}
+
+    .social-wrap .label {
+        display: block;
+        font-size: 14px;
+        color: #394150;
+        margin-bottom: 10px;
+    }
+
+.social {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    margin: 0 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.15);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+    .social:focus {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(78,84,200,.25);
+    }
+
+    .social:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0,0,0,.20);
+    }
+
+    /* Brand hints */
+    .social.fb {
+        color: #1877f2;
+    }
+
+    .social.tw {
+        color: #1d9bf0;
+    }
+
+    .social.g {
+        color: #ea4335;
+    }
+
+    /* Optional: icon letters look nicer */
+    .social span {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+
+    /* Welcome Banner */
+.welcome-banner {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 15px auto;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    animation: rainbowGlow 4s infinite, fadeOut 1s ease 6s forwards;
+}
+
+/* Color changing glow */
+@keyframes rainbowGlow {
+    0%   { color: #e83e8c; text-shadow: 0 0 10px #e83e8c; }
+    20%  { color: #ff5722; text-shadow: 0 0 10px #ff5722; }
+    40%  { color: #ffc107; text-shadow: 0 0 10px #ffc107; }
+    60%  { color: #28a745; text-shadow: 0 0 10px #28a745; }
+    80%  { color: #007bff; text-shadow: 0 0 10px #007bff; }
+    100% { color: #e83e8c; text-shadow: 0 0 10px #e83e8c; }
+}
+
+/* Auto fade out */
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.hello-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  animation: showHide 10s infinite ease-in-out;
+}
+
+.character img {
+  width: 60px;
+  height: auto;
+  animation: bounce 2s infinite;
+}
+
+.speech {
+  background: #ffcc00;
+  color: #222;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  animation: showHide 10s infinite ease-in-out;
+}
+
+/* Bounce animation for the character */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%     { transform: translateY(-5px); }
+}
+
+/* Show for 5s, hide for 5s */
+@keyframes showHide {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+
+/* 5s visible, 2s hidden */
+@keyframes helloSequence {
+    0% {
+        opacity: 1;
+    }
+
+    40% {
+        opacity: 1;
+    }
+    /* 5s of 7s */
+    62% {
+        opacity: 0;
+    }
+    /* 2s hidden */
+}
+
+/* ========== Welcome Text ========== */
+.welcome-text {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin: 15px auto;
+    display: block;
+    animation: showHideText 7s infinite, rainbowGlow 7s infinite linear;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    -webkit-text-stroke: 0.6px #000;
+}
+
+
+/* 5s visible, 5s hidden (10s total cycle) */
+@keyframes showHideText {
+    0% {
+        opacity: 1; /* visible start */
+    }
+
+    40% {
+        opacity: 1; /* stay visible for 5s */
+    }
+
+    62% {
+        opacity: 0; /* hide after 5s */
+    }
+
+    100% {
+        opacity: 0; /* stay hidden until next cycle */
+    }
+}
+
+
+
+/* Animated glowing rainbow colors */
+@keyframes rainbowGlow {
+    0% {
+        color: #e83e8c;
+        text-shadow: 0 0 8px #e83e8c;
+    }
+
+    20% {
+        color: #ff5722;
+        text-shadow: 0 0 8px #ff5722;
+    }
+
+    40% {
+        color: #ffc107;
+        text-shadow: 0 0 8px #ffc107;
+    }
+
+    60% {
+        color: #28a745;
+        text-shadow: 0 0 8px #28a745;
+    }
+
+    80% {
+        color: #007bff;
+        text-shadow: 0 0 8px #007bff;
+    }
+
+    100% {
+        color: #e83e8c;
+        text-shadow: 0 0 8px #e83e8c;
+    }
+}
+
+
+.character img {
+    width: 48px; /* 👈 smaller cartoon size */
+    height: 48px;
+    animation: waveHand 1.5s infinite;
+}
+
+/* 👋 Cartoon doctor image waving */
+@keyframes waveHand {
+    0%, 50%, 100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(8deg);
+    }
+
+    75% {
+        transform: rotate(-8deg);
+    }
+}
+
+
+.character-icon {
+    font-size: 80px; /* 👈 Increase or decrease size */
+    line-height: 1;
+}

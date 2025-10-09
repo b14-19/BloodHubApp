@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>WeHealth • Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="topbar">
+        <div class="brand">
+            <img src="https://img.icons8.com/color/48/heart-with-pulse.png" alt="logo">
+            <span>BloodHub</span>
+        </div>
+        <button class="lang-pill">English (EN)</button>
+    </div>
+
+    <!-- Card -->
+    <div class="auth-card">
+        <!-- Login inside the card (left) -->
+        <section class="panel">
+            <h2>Sign In</h2>
+            <form>
+                <div class="fg">
+                    <label>Username</label>
+                    <input type="text" placeholder="Enter username" required>
+                </div>
+                <div class="fg">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter password" required>
+                </div>
+                <div class="row">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn">Log In</button>
+                <div class="links">
+                    <a href="#">Can’t access your account?</a>
+                    <a href="#">Sign Up</a>
+                </div>
+                <div class="social-wrap" aria-label="Social sign in links">
+                    <span class="label">Or continue with</span>
+
+                    <!-- Facebook -->
+                    <a class="social fb" href="https://www.facebook.com/login/" target="_blank" rel="noopener" aria-label="Continue with Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+
+                    <!-- Twitter (X) -->
+                    <a class="social tw" href="https://x.com/i/flow/login" target="_blank" rel="noopener" aria-label="Continue with Twitter (X)">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+
+                    <!-- Google -->
+                    <a class="social g" href="https://www.google.com" target="_blank" rel="noopener" aria-label="Continue with Google">
+                        <i class="fab fa-google"></i>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a class="social ig" href="https://www.instagram.com/accounts/login/" target="_blank" rel="noopener" aria-label="Continue with Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+
+            </form>
+        </section>
+
+        <!-- Hero with doctor (right) -->
+        <section class="hero">
+            <div class="shape s1"></div>
+            <div class="shape s2"></div>
+            <div class="shape s3"></div>
+
+            <!-- Use your own file: /images/doctor.avif -->
+            <img class="doctor" src="/images/doctors.png" alt="Doctor">
+            <!-- If you haven’t added the file yet, temporary demo:
+                 https://cdn.pixabay.com/photo/2016/11/29/03/54/adult-1868750_1280.jpg -->
+
+        @*     <div class="badge customers">
+                <strong>50k+ Customers</strong>
+                <div class="faces"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            </div> *@
+
+           @*  <div class="badge connect">
+                <div>💬</div>
+                <div>
+                    <strong>Connect with a Doctor</strong>
+                    <div class="muted">Get expert advice in minutes</div>
+                </div>
+            </div> *@
+        </section>
+    </div>
+</body>
+</html>
