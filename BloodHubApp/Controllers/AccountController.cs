@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 
-namespace BloodHubApp.Controllers
+namespace BloodHubApp.Controllers   // <--- change namespace if needed
 {
     public class AccountController : Controller
     {
@@ -68,6 +68,12 @@ namespace BloodHubApp.Controllers
             // Success: create session
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role ?? "User");
+
+
+
+            HttpContext.Session.SetString("Username", user.Username);
+            HttpContext.Session.SetString("Role", user.Role);   // "User" | "Admin" | "SuperAdmin"
+
             HttpContext.Session.SetString("LoginTime", DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss tt"));
 
             return RedirectToAction("Index", "Dashboard");
@@ -195,6 +201,11 @@ namespace BloodHubApp.Controllers
 
             TempData["Success"] = "Password updated. You can now log in.";
             return RedirectToAction(nameof(Login));
+        }
+
+        private string ComputeSha256Hash(object value)
+        {
+            throw new NotImplementedException();
         }
 
         // ---------- HELPERS ----------

@@ -29,8 +29,17 @@
             <div class="character">
                 <span class="character">👩‍⚕️</span>
             </div>
+
+            <style>
+                .character {
+                    font-size: 80px; /* 👈 increase or decrease as you want */
+                    display: inline-block;
+                    text-align: center;
+                }
+            </style>
+
             <div class="speech">
-                Hello, I am Sonu.
+                Hello
             </div>
         </div>
 
@@ -55,15 +64,26 @@
 
                 <div class="fg">
                     <label asp-for="Username">Username</label>
-                    <input asp-for="Username" placeholder="Enter username" />
+                    <input asp-for="Username"
+                           placeholder="Enter username"
+                           autocomplete="off"
+                           autocapitalize="none"
+                           spellcheck="false"
+                           inputmode="text"
+                           data-lpignore="true" />  <!-- disable password managers too -->
                     <span asp-validation-for="Username" class="text-danger"></span>
                 </div>
 
                 <div class="fg">
                     <label asp-for="Password">Password</label>
-                    <input asp-for="Password" type="password" placeholder="Enter password" />
+                    <input asp-for="Password"
+                           type="password"
+                           placeholder="Enter password"
+                           autocomplete="new-password"
+                           data-lpignore="true" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
+
 
                 <!-- ✅ Remember me + Forgot password -->
                 <div class="row d-flex justify-content-between align-items-center">

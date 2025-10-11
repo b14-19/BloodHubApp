@@ -1,9 +1,10 @@
 ﻿using BloodHub.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient; // for SqlConnectionStringBuilder
+using Microsoft.Data.SqlClient;
 using BloodHub.Models;
 using System.Security.Cryptography;
 using System.Text;
+using BloodHubApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ if (string.IsNullOrWhiteSpace(conn))
 
 // Allow more time for Serverless DB cold start
 var csb = new SqlConnectionStringBuilder(conn);
-if (csb.ConnectTimeout < 60) csb.ConnectTimeout = 60; // increase to 60s for initial wake
+if (csb.ConnectTimeout < 60) csb.ConnectTimeout = 60;
 conn = csb.ConnectionString;
 
 // MVC + DbContext + Session
@@ -33,9 +34,12 @@ builder.Services.AddDbContext<BloodHubContext>(o =>
         sql =>
         {
             sql.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
-            sql.CommandTimeout(60); // allow long first queries/migrations
+            sql.CommandTimeout(60);
         }));
 builder.Services.AddSession();
+
+// Register NotificationService
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 var app = builder.Build();
 

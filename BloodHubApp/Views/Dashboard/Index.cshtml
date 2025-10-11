@@ -24,272 +24,268 @@
 
 <style>
     :root {
-    --Apos: #6C5CE7;
-    --Aneg: #A78BFA;
-    --Bpos: #00B894;
-    --Bneg: #00CEC9;
-    --Opos: #FDCB6E;
-    --Oneg: #E17055;
-    --ABpos: #FF7675;
-    --ABneg: #74B9FF;
+        --Apos: #6C5CE7;
+        --Aneg: #A78BFA;
+        --Bpos: #00B894;
+        --Bneg: #00CEC9;
+        --Opos: #FDCB6E;
+        --Oneg: #E17055;
+        --ABpos: #FF7675;
+        --ABneg: #74B9FF;
     }
 
     body {
-    background: linear-gradient(120deg,#e0e9ff,#ffe0f3,#fff1d6);
-    min-height: 100vh;
-    margin: 0;
-    overflow-x: hidden;
+        background: linear-gradient(120deg,#e0e9ff,#ffe0f3,#fff1d6);
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
     }
 
     .sidebar {
-    background: #121826;
-    color: #fff;
-    width: 220px;
-    min-height: 100vh;
-    flex-shrink: 0;
+        background: #121826;
+        color: #fff;
+        width: 220px;
+        min-height: 100vh;
+        flex-shrink: 0;
     }
 
-    .sidebar .nav-link {
-    color: #d1d5db;
-    }
+        .sidebar .nav-link {
+            color: #d1d5db;
+        }
 
-    .sidebar .nav-link.active, .sidebar .nav-link:hover {
-    color: #fff;
-    background: #1f2937;
-    border-radius: 10px;
-    }
+            .sidebar .nav-link.active, .sidebar .nav-link:hover {
+                color: #fff;
+                background: #1f2937;
+                border-radius: 10px;
+            }
 
     .card-grad {
-    border: 0;
-    color: #0b0f1a;
-    border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+        border: 0;
+        color: #0b0f1a;
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0,0,0,.12);
     }
 
     .grad-1 {
-    background: linear-gradient(135deg,#a18cd1,#fbc2eb);
+        background: linear-gradient(135deg,#a18cd1,#fbc2eb);
     }
 
     .grad-2 {
-    background: linear-gradient(135deg,#96fbc4,#f9f586);
+        background: linear-gradient(135deg,#96fbc4,#f9f586);
     }
 
     .grad-3 {
-    background: linear-gradient(135deg,#ffd3a5,#fd6585);
+        background: linear-gradient(135deg,#ffd3a5,#fd6585);
     }
 
     .grad-4 {
-    background: linear-gradient(135deg,#74ebd5,#acb6e5);
+        background: linear-gradient(135deg,#74ebd5,#acb6e5);
     }
 
     .badge-chip {
-    border-radius: 10px;
-    font-weight: 700;
-    padding: .25rem .5rem;
+        border-radius: 10px;
+        font-weight: 700;
+        padding: .25rem .5rem;
     }
 
 
     /* Animated Table Styling */
     .animated-table {
-    border-collapse: separate;
-    border-spacing: 0 10px; /* gap between rows */
-    width: 100%;
-    background: transparent;
-    font-size: 15px;
+        border-collapse: separate;
+        border-spacing: 0 10px; /* gap between rows */
+        width: 100%;
+        background: transparent;
+        font-size: 15px;
     }
 
-    .animated-table thead {
-    background: linear-gradient(90deg, #4e54c8, #8f94fb);
-    color: white;
-    border-radius: 8px;
-    }
+        .animated-table thead {
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            color: white;
+            border-radius: 8px;
+        }
 
-    .animated-table thead th {
-    padding: 12px;
-    text-align: center;
-    font-weight: 600;
-    }
+            .animated-table thead th {
+                padding: 12px;
+                text-align: center;
+                font-weight: 600;
+            }
 
-    .animated-table tbody tr {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
+        .animated-table tbody tr {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
 
-    .animated-table tbody tr:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    background: #f9f9ff;
-    }
+            .animated-table tbody tr:hover {
+                transform: scale(1.02);
+                box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+                background: #f9f9ff;
+            }
 
-    .animated-table tbody td {
-    padding: 12px;
-    vertical-align: middle;
-    text-align: center;
-    border: none;
-    }
+        .animated-table tbody td {
+            padding: 12px;
+            vertical-align: middle;
+            text-align: center;
+            border: none;
+        }
 
-    /* Fade-in animation */
-    .animated-table tbody tr {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s ease forwards;
-    }
+        /* Fade-in animation */
+        .animated-table tbody tr {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
 
-    .animated-table tbody tr:nth-child(odd) {
-    background: #fdfdfd;
-    }
+            .animated-table tbody tr:nth-child(odd) {
+                background: #fdfdfd;
+            }
 
-    .animated-table tbody tr:nth-child(even) {
-    background: #f7f9fc;
-    }
+            .animated-table tbody tr:nth-child(even) {
+                background: #f7f9fc;
+            }
 
     .table {
-    border-radius: 8px;
-    overflow: hidden;
+        border-radius: 8px;
+        overflow: hidden;
     }
 
-    .table thead th {
-    text-align: center;
-    vertical-align: middle;
-    }
+        .table thead th {
+            text-align: center;
+            vertical-align: middle;
+        }
 
-    .table tbody td {
-    vertical-align: middle;
-    }
+        .table tbody td {
+            vertical-align: middle;
+        }
 
     .table-hover tbody tr:hover {
-    background-color: #f8f9fa;
-    transform: scale(1.01);
-    transition: 0.2s ease-in-out;
+        background-color: #f8f9fa;
+        transform: scale(1.01);
+        transition: 0.2s ease-in-out;
     }
 
     .badge {
-    font-size: 0.85rem;
-    padding: 6px 12px;
-    border-radius: 12px;
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        border-radius: 12px;
     }
 
     /* Hospital Section */
     .hospital-section {
-    margin-bottom: 2rem;
+        margin-bottom: 2rem;
     }
 
     /* Search Box */
     .hospital-search {
-    background: #fff;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+        background: #fff;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
-    .hospital-search input {
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    padding: 8px 12px;
-    flex: 1;
-    transition: border 0.3s ease;
-    }
+        .hospital-search input {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 12px;
+            flex: 1;
+            transition: border 0.3s ease;
+        }
 
-    .hospital-search input:focus {
-    border-color: #4e54c8;
-    outline: none;
-    }
+            .hospital-search input:focus {
+                border-color: #4e54c8;
+                outline: none;
+            }
 
-    .hospital-search button {
-    background: linear-gradient(135deg, #4e54c8, #8f94fb);
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-weight: 600;
-    color: #fff;
-    transition: 0.3s;
-    }
+        .hospital-search button {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 600;
+            color: #fff;
+            transition: 0.3s;
+        }
 
-    .hospital-search button:hover {
-    background: linear-gradient(135deg, #3d42a6, #6e75e9);
-    }
+            .hospital-search button:hover {
+                background: linear-gradient(135deg, #3d42a6, #6e75e9);
+            }
 
     /* Hospital Edit Card */
     .hospital-edit {
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
     }
 
-    .hospital-edit h4 {
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #121826;
-    }
+        .hospital-edit h4 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #121826;
+        }
 
-    .hospital-edit input {
-    border: 2px solid #eee;
-    border-radius: 8px;
-    padding: 8px;
-    width: 100%;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-    }
+        .hospital-edit input {
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 8px;
+            width: 100%;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    .hospital-edit input:focus {
-    border-color: #4e54c8;
-    box-shadow: 0 0 0 4px rgba(78, 84, 200, 0.15);
-    outline: none;
-    }
+            .hospital-edit input:focus {
+                border-color: #4e54c8;
+                box-shadow: 0 0 0 4px rgba(78, 84, 200, 0.15);
+                outline: none;
+            }
 
-    .hospital-edit .btn {
-    background: linear-gradient(135deg, #4e54c8, #8f94fb);
-    color: #fff;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 10px 20px;
-    transition: 0.3s;
-    }
+        .hospital-edit .btn {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
 
-    .hospital-edit .btn:hover {
-    background: linear-gradient(135deg, #3d42a6, #6e75e9);
-    transform: translateY(-2px);
-    }
+            .hospital-edit .btn:hover {
+                background: linear-gradient(135deg, #3d42a6, #6e75e9);
+                transform: translateY(-2px);
+            }
 
     /* Tables */
     .table {
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
     }
 
-    .table thead {
-    background: linear-gradient(90deg, #4e54c8, #8f94fb);
-    color: #fff;
-    text-align: center;
-    }
+        .table thead {
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            color: #fff;
+            text-align: center;
+        }
 
-    .table th, .table td {
-    text-align: center;
-    padding: 12px;
-    vertical-align: middle;
-    }
+        .table th, .table td {
+            text-align: center;
+            padding: 12px;
+            vertical-align: middle;
+        }
 
-    .table tbody tr {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+        .table tbody tr {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    .table tbody tr:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    background: #f9f9ff;
-    }
-
-
-
-
+            .table tbody tr:hover {
+                transform: scale(1.01);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                background: #f9f9ff;
+            }
 </style>
 
 <div class="d-flex">
@@ -299,7 +295,7 @@
             <img src="https://img.icons8.com/color/48/heart-with-pulse.png" alt="logo">
             <span class="fw-semibold">BloodHub</span>
         </div>
-        <ul class="nav flex-column gap-1">
+        @*  <ul class="nav flex-column gap-1">
             <li class="nav-item">
                 <a class="nav-link @(fullMode ? "active" : "")"
                 href="@Url.Action("Index","Dashboard", new { mode="full" })">🏠 Dashboard</a>
@@ -319,7 +315,7 @@
             <li class="nav-item">
                 <a class="nav-link @(mode == "hospitals" ? "active" : "")"
                 href="@Url.Action("Index", "Dashboard", new { mode = "hospitals" })">
-                    🏥 Hospitals
+                    🏥 Blood Bank
                 </a>
             </li>
 
@@ -330,7 +326,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link @(requestsMode ? "active" : "")"
-                href="@Url.Action("Index","Dashboard", new { mode="requests" })">📦 Requests</a>
+                   href="@Url.Action("Index","Dashboard", new { mode="requests" })">📦Hospital Request to Blood Bank </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(ordersMode ? "active" : "")"
@@ -361,14 +357,62 @@
 
 
 
+        </ul> *@
+
+
+        @using Microsoft.AspNetCore.Http
+        @{
+            var role = Context.Session.GetString("Role") ?? "User";
+            bool isUser = role.Equals("User", StringComparison.OrdinalIgnoreCase);
+            bool isAdmin = role.Equals("Admin", StringComparison.OrdinalIgnoreCase);
+            bool isSuper = role.Equals("SuperAdmin", StringComparison.OrdinalIgnoreCase);
+        }
+
+        <ul class="nav flex-column gap-1">
+            <!-- Always visible -->
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "full" })">🏠 Dashboard</a>
+            </li>
+
+            @if (isUser)
+            {
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "table" })">📑 Reports</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "requests" })">📦 Hospital Request to Blood Bank</a></li>
+            }
+
+            @if (isAdmin)
+            {
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "users" })">👤 New User Create</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "hospitals" })">🏥 Blood Bank</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "table" })">📑 Reports</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "requests" })">📦 Hospital Request to Blood Bank</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "alerts" })">📰 Alerts</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "donor" })">🧑‍🤝‍🧑 BloodDonor Free / Paid Service</a></li>
+            }
+
+            @if (isSuper)
+            {
+                <!-- show everything -->
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "users" })">👤 New User Create</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "hospitals" })">🏥 Blood Bank</a></li>
+                <li><a class="nav-link" href="#">💉 Inventory</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "table" })">📑 Reports</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "requests" })">📦 Hospital Request to Blood Bank</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "orders" })">🩸 BloodOrders</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "alerts" })">📰 Alerts</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "donor" })">🧑‍🤝‍🧑 BloodDonor Free / Paid Service</a></li>
+                <li><a class="nav-link" href="@Url.Action("Index", "Dashboard", new { mode = "donordata" })">👥 DonorDatas</a></li>
+            }
         </ul>
+
+
     </div>
 
     <!-- Main Content -->
     <div class="flex-grow-1 p-4">
         <!-- User Info Bar -->
         <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded shadow-sm"
-        style="background:#121826; color:#fff; border-radius:12px;">
+             style="background:#121826; color:#fff; border-radius:12px;">
 
             <div class="d-flex flex-column">
                 <div class="d-flex align-items-center mb-1">
@@ -383,13 +427,13 @@
 
             <div>
                 <!-- Home Button -->
-                <a href="@Url.Action("Index","Dashboard", new { mode="full" })"
-                class="btn btn-sm btn-primary me-2 d-flex align-items-center gap-1">
+                <a href="@Url.Action("Index", "Dashboard", new { mode = "full" })"
+                   class="btn btn-sm btn-primary me-2 d-flex align-items-center gap-1">
                     <i class="bi bi-house-door"></i> Home
                 </a>
                 <!-- Logout Button -->
-                <a href="@Url.Action("Logout","Account")"
-                class="btn btn-sm btn-danger d-flex align-items-center gap-1">
+                <a href="@Url.Action("Logout", "Account")"
+                   class="btn btn-sm btn-danger d-flex align-items-center gap-1">
                     <i class="bi bi-box-arrow-right"></i> Logout
                 </a>
             </div>
@@ -400,6 +444,14 @@
                 <span>@Model.NotificationText</span>
             </div>
         } *@
+
+
+
+
+
+
+
+
 
 
 
@@ -494,7 +546,7 @@
             }
         }
 
-        
+
 
 
 
@@ -528,8 +580,8 @@
 
 
         @if (string.Equals(mode, "users", StringComparison.OrdinalIgnoreCase)
-        && !string.Equals(mode, "donor", StringComparison.OrdinalIgnoreCase)
-        && !requestsMode && !ordersMode && !tableOnly)
+                && !string.Equals(mode, "donor", StringComparison.OrdinalIgnoreCase)
+                && !requestsMode && !ordersMode && !tableOnly)
         {
             <div class="card card-grad p-3 mb-4">
                 <h4 class="fw-bold mb-3">Create / Manage Users</h4>
@@ -548,7 +600,7 @@
                             <select name="Role" class="form-select" required>
                                 <option>User</option>
                                 <option>Admin</option>
-                                <option>Nurse</option>
+                                <option>SuperAdmin</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -753,7 +805,7 @@
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                              
+
                             </div>
                         </form>
                     </div>
@@ -882,7 +934,7 @@
 
 
 
-        
+
 
 
 
@@ -920,12 +972,12 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Alert Text</label>
                             <textarea name="Text" class="form-control" rows="5"
-                                      placeholder="Type the alert text here..." required>@(Model?.NotificationText ?? "")</textarea>
+                                  placeholder="Type the alert text here..." required>@(Model?.NotificationText ?? "")</textarea>
                         </div>
 
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-primary">Save Alert</button>
-                            <a href="@Url.Action("Index","Dashboard", new { mode = "full" })" class="btn btn-secondary">Back to Dashboard</a>
+                            <a href="@Url.Action("Index", "Dashboard", new { mode = "full" })" class="btn btn-secondary">Back to Dashboard</a>
                         </div>
                     </form>
                 </div>
@@ -994,11 +1046,11 @@
         {
             <!-- Search Box -->
             <div class="card card-grad p-3 mb-4">
-                <h4 class="fw-bold mb-3">Search Hospital</h4>
+                <h4 class="fw-bold mb-3">Search Blood Bank</h4>
                 <form method="get" asp-controller="Dashboard" asp-action="Index">
                     <input type="hidden" name="mode" value="hospitals" />
                     <div class="input-group">
-                        <input type="number" name="hospitalId" class="form-control" placeholder="Enter Hospital ID" required />
+                        <input type="number" name="hospitalId" class="form-control" placeholder="Enter BloodBank ID" required />
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </form>
@@ -1011,7 +1063,7 @@
 
                 if (hospital != null)
                 {
-                    
+
                     <!-- Hospital Edit Form -->
                     <div class="card card-grad p-3 mb-4">
                         <h4 class="fw-bold mb-1">Hospital Edit</h4>
@@ -1066,7 +1118,7 @@
 
                     <!-- Single Hospital Inventory Table -->
                     <div class="card card-grad p-3 mb-4">
-                        <h4 class="fw-bold mb-3">Hospital Inventory Report</h4>
+                        <h4 class="fw-bold mb-3">Blood Banck Inventory Report</h4>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -1137,8 +1189,8 @@
         }
 
 
-     
-        <!-- Requests Page -->
+
+        @*  <!-- Requests Page -->
         @if (requestsMode && !ordersMode && !tableOnly)
         {
             <div class="card card-grad p-3 mb-4">
@@ -1202,8 +1254,274 @@
                 </form>
             </div>
         }
+        @if (TempData["LastRequestJson"] != null)
+        {
+            <div class="alert alert-success d-flex justify-content-between align-items-center mt-3" id="reqSavedBox">
+                <div>
+                    <strong>Saved!</strong> Your blood request was created successfully.
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="btnDownloadRequestPdf">
+                        Download PDF
+                    </button>
+                    <a class="btn btn-outline-secondary btn-sm" href="@Url.Action("Index","Dashboard", new { mode="requests" })">
+                        Add another
+                    </a>
+                </div>
+            </div>
 
-@* 
+            <script>
+                // expose the saved record to JS
+                window.__lastRequest = @Html.Raw(TempData["LastRequestJson"]);
+            </script>
+
+
+
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+                    integrity="sha512-/0pQ2F2l1oXyW8bHqZkX3U4pEQtGlQ3TPrQpc5Y0mN3/3o0eD7Qf1XH6s6KQ5p6LwqC9yM6YzW6ZpE3h4X3tyw=="
+                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+            <script>
+                (function () {
+                  const saved = window.__lastRequest;
+                  const btn = document.getElementById('btnDownloadRequestPdf');
+                  if (!btn || !saved) return;
+
+                  btn.addEventListener('click', function () {
+                    try {
+                      const data = typeof saved === 'string' ? JSON.parse(saved) : saved;
+                      makeRequestPdf(data);
+                    } catch (e) {
+                      alert('Could not prepare PDF: ' + e.message);
+                    }
+                  });
+
+                  function makeRequestPdf(r) {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'pt', 'a4');
+
+                    const pageW = pdf.internal.pageSize.getWidth();
+                    const line = (y) => pdf.line(40, y, pageW - 40, y);
+
+                    // Header
+                    pdf.setFontSize(18);
+                    pdf.text('Blood Request', 40, 50);
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(120);
+                    const dt = r.requestedAt ? formatDate(r.requestedAt) : new Date().toLocaleString();
+                    pdf.text(`Request ID: ${r.id ?? '-'}`, 40, 68);
+                    pdf.text(`Created: ${dt}`, 40, 82);
+                    pdf.setTextColor(0);
+                    line(92);
+
+                    // Body
+                    pdf.setFontSize(12);
+                    let y = 120;
+                    y = row(pdf, y, 'Hospital', r.hospitalName ?? r.hospitalId ?? '-');
+                    y = row(pdf, y, 'Blood Group', r.bloodGroup ?? '-');
+                    y = row(pdf, y, 'Units', (r.units ?? '-').toString());
+                    y = row(pdf, y, 'Person Name', r.personName ?? '-');
+                    y = row(pdf, y, 'Mobile Number', r.mobileNumber ?? '-');
+                    y = row(pdf, y, 'Address', r.address ?? '-');
+
+                    line(y + 10);
+                    pdf.setFontSize(9);
+                    pdf.text('Generated by BloodHub', 40, y + 28);
+
+                    const fname = `BloodRequest_${r.id ?? 'new'}_${(new Date()).toISOString().slice(0,10)}.pdf`;
+                    pdf.save(fname);
+                  }
+
+                  function row(pdf, y, label, value) {
+                    pdf.setFont(undefined, 'bold'); pdf.text(label + ':', 40, y);
+                    pdf.setFont(undefined, 'normal');
+                    pdf.text(String(value), 160, y, { maxWidth: pdf.internal.pageSize.getWidth() - 200 });
+                    return y + 24;
+                  }
+
+                  function formatDate(x) {
+                    try {
+                      const d = new Date(x);
+                      if (isNaN(d.getTime())) return String(x);
+                      return d.toLocaleString();
+                    } catch { return String(x); }
+                  }
+                })();
+            </script>
+
+        } *@
+        @if (requestsMode && !ordersMode && !tableOnly)
+        {
+            <div class="card card-grad p-3 mb-4">
+                <h4 class="fw-bold mb-3">Create New Blood Request</h4>
+
+                <form method="post" asp-action="SaveRequest" asp-controller="Dashboard">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Hospital -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Hospital</label>
+                        <select class="form-select" name="HospitalId" required>
+                            @foreach (var h in Model.Hospitals)
+                            {
+                                <option value="@h.Id">@h.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Blood Group -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Blood Group</label>
+                        <select class="form-select" name="BloodGroup" required>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                        </select>
+                    </div>
+
+                    <!-- Units -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Units</label>
+                        <input type="number" name="Units" class="form-control" min="1" value="1" required />
+                    </div>
+
+                    <!-- Person Name -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Person Name</label>
+                        <input type="text" name="PersonName" class="form-control" placeholder="Enter person name" required />
+                    </div>
+
+                    <!-- Mobile Number -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Mobile Number</label>
+                        <input type="tel" name="MobileNumber" class="form-control" placeholder="Enter mobile number"
+                               pattern="[0-9]{10}" maxlength="10" required />
+                        <small class="text-muted">Enter 10-digit mobile number</small>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Address</label>
+                        <textarea name="Address" class="form-control" rows="3" placeholder="Enter full address" required></textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary w-100">Save Request</button>
+                </form>
+            </div>
+        }
+
+        @* Success strip + Download PDF (only after saving) *@
+        @if (TempData["LastRequestJson"] != null)
+        {
+            <div class="alert alert-success d-flex justify-content-between align-items-center mt-3" id="reqSavedBox">
+                <div>
+                    <strong>Saved!</strong> Your blood request was created successfully.
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="btnDownloadRequestPdf">
+                        Download PDF
+                    </button>
+                    <a class="btn btn-outline-secondary btn-sm" href="@Url.Action("Index", "Dashboard", new { mode = "requests" })">
+                        Add another
+                    </a>
+                </div>
+            </div>
+
+            <script>
+                // Pass the saved record to JS
+                window.__lastRequest = @Html.Raw(TempData["LastRequestJson"]);
+            </script>
+
+            <!-- jsPDF (no integrity attribute to avoid blocking) -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+            <script>
+                (function () {
+                    const saved = window.__lastRequest;
+                    const btn = document.getElementById('btnDownloadRequestPdf');
+                    if (!btn || !saved) return;
+
+                    btn.addEventListener('click', function () {
+                        try {
+                            const data = typeof saved === 'string' ? JSON.parse(saved) : saved;
+                            makeRequestPdf(data);
+                        } catch (e) {
+                            alert('Could not prepare PDF: ' + (e && e.message ? e.message : e));
+                        }
+                    });
+
+                    function makeRequestPdf(r) {
+                        const { jsPDF } = window.jspdf;
+                        const pdf = new jsPDF('p', 'pt', 'a4');
+                        const pageW = pdf.internal.pageSize.getWidth();
+
+                        pdf.setFontSize(18);
+                        pdf.text('Blood Request', 40, 50);
+
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(120);
+                        const dt = r.requestedAt ? toLocal(r.requestedAt) : new Date().toLocaleString();
+                        pdf.text(`Request ID: ${r.id ?? '-'}`, 40, 68);
+                        pdf.text(`Created: ${dt}`, 40, 82);
+
+                        pdf.setDrawColor(200); pdf.line(40, 92, pageW - 40, 92);
+                        pdf.setTextColor(0); pdf.setFontSize(12);
+
+                        let y = 120;
+                        y = row(pdf, y, 'Hospital', r.hospitalName ?? r.hospitalId ?? '-');
+                        y = row(pdf, y, 'Blood Group', r.bloodGroup ?? '-');
+                        y = row(pdf, y, 'Units', String(r.units ?? '-'));
+                        y = row(pdf, y, 'Person Name', r.personName ?? '-');
+                        y = row(pdf, y, 'Mobile Number', r.mobileNumber ?? '-');
+                        y = row(pdf, y, 'Address', r.address ?? '-');
+
+                        pdf.setDrawColor(200); pdf.line(40, y + 10, pageW - 40, y + 10);
+                        pdf.setFontSize(9);
+                        pdf.text('Generated by BloodHub', 40, y + 28);
+
+                        const fname = `BloodRequest_${r.id ?? 'new'}_${(new Date()).toISOString().slice(0,10)}.pdf`;
+                        pdf.save(fname);
+                    }
+
+                    function row(pdf, y, label, value) {
+                        pdf.setFont(undefined, 'bold'); pdf.text(label + ':', 40, y);
+                        pdf.setFont(undefined, 'normal');
+                        pdf.text(String(value), 160, y, {
+                            maxWidth: pdf.internal.pageSize.getWidth() - 200
+                        });
+                        return y + 24;
+                    }
+
+                    function toLocal(x) {
+                        try {
+                            const d = new Date(x);
+                            return isNaN(d.getTime()) ? String(x) : d.toLocaleString();
+                        } catch { return String(x); }
+                    }
+                })();
+            </script>
+        }
+
+        @* Guard against DataTable init on this page (prevents "$(...).DataTable is not a function") *@
+        <script>
+            (function () {
+                // Only init DataTables if the plugin exists and the table is present
+                const t = document.getElementById('requestsTable');
+                if (t && window.jQuery && jQuery.fn && jQuery.fn.dataTable) {
+                    jQuery(t).DataTable();
+                }
+            })();
+        </script>
+
+        @* 
         <!-- Orders Page -->
         @if (ordersMode && !requestsMode && !tableOnly)
         {
@@ -1474,21 +1792,21 @@
         }
 
 
- <div class="card card-grad p-3">
-                <h4 class="fw-bold mb-3">Hospital Requests</h4>
-                <table class="table animated-table align-middle">
-          
+        <div class="card card-grad p-3">
+            <h4 class="fw-bold mb-3">Hospital Requests</h4>
+            <table class="table animated-table align-middle">
 
-        <!-- Reports (Table Only) -->
+
+                <!-- Reports (Table Only) -->
                 @if (tableOnly && !requestsMode && !ordersMode)
                 {
-                   
+
 
                     <div class="card card-grad p-3">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
                                 <div class="animated-report-header">
-                                    Hospital Inventory Report
+                                    Blood Bank Inventory Report
                                     <span class="underline"></span>
                                 </div>
                                 <div class="text-muted small mt-2">A quick export of current stock by hospital</div>
@@ -1507,9 +1825,9 @@
                         <div id="inventoryTableWrapper">
                             <div class="table-responsive">
                                 <table id="inventoryTable" class="table align-middle">
-                                    <thead class="table-light">
+                                    <thead class="custom-header">
                                         <tr>
-                                            <th>Hospital</th>
+                                            <th>Blood Bank </th>
                                             <th>City</th>
                                             <th class="text-center">A+</th>
                                             <th class="text-center">A-</th>
@@ -1520,6 +1838,7 @@
                                             <th class="text-center">AB+</th>
                                             <th class="text-center">AB-</th>
                                             <th class="text-center">Total</th>
+                                            <th class="text-center">Last Update Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1540,232 +1859,388 @@
                                                 <td class="text-center">@h.Stock!.ABPos</td>
                                                 <td class="text-center">@h.Stock!.ABNeg</td>
                                                 <td class="text-center fw-bold">@h.Stock!.Total</td>
+                                                <td class="text-center">@h.Stock!.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss")</td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
                             </div>
+
+                            <style>
+                                /* 🟣 Custom purple header like Easy DataTable */
+                                .inventoryTable {
+                                    background-color: #6a1b9a !important; /* deep purple */
+                                    color: #ffffff !important; /* white text */
+                                }
+
+                                .custom-header th {
+                                    font-weight: 600;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    border: none; /* remove default border */
+                                }
+
+                                .custom-header tr {
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                }
+
+                                /* Zebra striping for readability */
+                                #inventoryTable tbody tr:nth-child(odd) {
+                                    background-color: #f9f9f9;
+                                }
+
+                                #inventoryTable tbody tr:nth-child(even) {
+                                    background-color: #ffffff;
+                                }
+
+                                #inventoryTable tbody tr:hover {
+                                    background-color: #f1f1f1;
+                                }
+
+                                /* Optional: make the table header stick if scrolling */
+                                #inventoryTable thead.custom-header th {
+                                    position: sticky;
+                                    top: 0;
+                                    z-index: 2;
+                                }
+                            </style>
+
+
                         </div>
                     </div>
+                    <!-- jQuery (must be first) -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-                    <!-- Scripts: SheetJS (Excel), html2canvas + jsPDF (PDF) -->
+                    <!-- DataTables (optional; only if you want paging/sort on #inventoryTable) -->
+                    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+                    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+                    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+                    <!-- Export libs -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+                            crossorigin="anonymous"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"
+                            crossorigin="anonymous"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+                            crossorigin="anonymous"></script>
+
                     <script>
-                        /* Improved exportTableToPdf - fits width & splits pages reliably */
-                        async function exportTableToPdf() {
-                          const wrapper = document.getElementById('inventoryTableWrapper');
-                          if (!wrapper) return alert('Table wrapper not found.');
-
-                          try {
-                            // wait a tick so any pending rendering finishes
-                            await new Promise(r => setTimeout(r, 120));
-
-                            // clone wrapper for export (keeps original untouched)
-                            const clone = wrapper.cloneNode(true);
-                            clone.style.width = 'auto';
-                            clone.style.maxWidth = 'none';
-                            clone.style.boxShadow = 'none';
-                            clone.style.transform = 'none';
-                            clone.classList.remove('no-anim');
-
-                            // small container so html2canvas captures cleanly
-                            const exportContainer = document.createElement('div');
-                            exportContainer.style.position = 'fixed';
-                            exportContainer.style.left = '-9999px';
-                            exportContainer.style.top = '0';
-                            exportContainer.style.background = '#fff';
-                            exportContainer.style.padding = '14px';
-                            exportContainer.appendChild(clone);
-                            document.body.appendChild(exportContainer);
-
-                            // inline computed styles to avoid missing fonts/spacing
-                            const applyInline = (root) => {
-                              const props = ['font-family','font-size','font-weight','color','background-color','padding','margin','border','border-radius','box-shadow','text-align','line-height','width','display','vertical-align','white-space','word-break','box-sizing'];
-                              root.querySelectorAll('*').forEach(el => {
-                                try {
-                                  const cs = getComputedStyle(el);
-                                  let s = el.getAttribute('style') || '';
-                                  props.forEach(p => {
-                                    const v = cs.getPropertyValue(p);
-                                    if (v && v !== '0px' && v !== 'normal' && v !== 'rgba(0, 0, 0, 0)' && v !== 'transparent') {
-                                      s += `${p}:${v};`;
-                                    }
-                                  });
-                                  el.setAttribute('style', s);
-                                } catch(e){}
-                              });
-                            };
-                            applyInline(exportContainer);
-
-                            // Use html2canvas to render the clone
-                            const scale = Math.min(2, window.devicePixelRatio || 1.5);
-                            const canvas = await html2canvas(exportContainer, {
-                              scale: scale,
-                              useCORS: true,
-                              backgroundColor: '#ffffff',
-                              scrollX: 0,
-                              scrollY: -window.scrollY
-                            });
-
-                            // Prepare jsPDF
-                            const { jsPDF } = window.jspdf;
-                            // Decide orientation: landscape when the table is wide
-                            const preferLandscape = canvas.width > canvas.height && (canvas.width / canvas.height) > 1.2;
-                            const pdf = new jsPDF(preferLandscape ? 'l' : 'p', 'pt', 'a4');
-
-                            const pdfPageW = pdf.internal.pageSize.getWidth();
-                            const pdfPageH = pdf.internal.pageSize.getHeight();
-
-                            // Scale canvas image to fit PDF page width
-                            const imgWidthPx = canvas.width;
-                            const imgHeightPx = canvas.height;
-                            const pxPerPt = imgWidthPx / pdfPageW;
-                            const pageHeightPx = Math.floor(pdfPageH * pxPerPt);
-
-                            // If image height fits one page
-                            if (imgHeightPx <= pageHeightPx) {
-                              const imgData = canvas.toDataURL('image/png');
-                              pdf.addImage(imgData, 'PNG', 0, 0, pdfPageW, imgHeightPx / pxPerPt);
-                              pdf.save('Hospital_Inventory_' + (new Date()).toISOString().slice(0,10) + '.pdf');
-                              exportContainer.remove();
-                              return;
-                            }
-
-                            // Multi-page slicing
-                            const totalPages = Math.ceil(imgHeightPx / pageHeightPx);
-                            for (let p = 0; p < totalPages; p++) {
-                              const sliceH = (p === totalPages - 1) ? (imgHeightPx - p * pageHeightPx) : pageHeightPx;
-                              const pageCanvas = document.createElement('canvas');
-                              pageCanvas.width = imgWidthPx;
-                              pageCanvas.height = sliceH;
-                              const ctx = pageCanvas.getContext('2d');
-                              ctx.drawImage(canvas, 0, p * pageHeightPx, imgWidthPx, sliceH, 0, 0, imgWidthPx, sliceH);
-
-                              const imgData = pageCanvas.toDataURL('image/png');
-                              const imgHInPdf = sliceH / pxPerPt;
-
-                              if (p > 0) pdf.addPage();
-                              pdf.addImage(imgData, 'PNG', 0, 0, pdfPageW, imgHInPdf);
-                            }
-
-                            pdf.save('Hospital_Inventory_' + (new Date()).toISOString().slice(0,10) + '.pdf');
-                            exportContainer.remove();
-                          } catch (err) {
-                            console.error('PDF export error', err);
-                            alert('PDF export failed: ' + (err && err.message ? err.message : err));
+                        // Safe DataTables init (prevents "$(...).DataTable is not a function")
+                        (function () {
+                          const tbl = document.getElementById('inventoryTable');
+                          if (tbl && window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
+                            jQuery(tbl).DataTable({ paging: true, searching: true, ordering: true });
                           }
-                        }
+                        })();
+
+                        // ---------- PDF ----------
+                        window.exportTableToPdf = function () {
+                          const table = document.getElementById('inventoryTable');
+                          if (!table) { alert('inventoryTable not found'); return; }
+
+                          const jsPDF = window.jspdf && (window.jspdf.jsPDF || window.jspdf);
+                          if (!jsPDF) { alert('jsPDF not loaded'); return; }
+                          if (!jsPDF.API?.autoTable && !window.jspdf.jsPDF.API?.autoTable) {
+                            alert('jsPDF autoTable plugin not loaded'); return;
+                          }
+
+                          // headers
+                          const head = [Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim())];
+                          // body
+                          const body = Array.from(table.querySelectorAll('tbody tr'))
+                            .map(tr => Array.from(tr.cells).map(td => (td.textContent || '').trim()));
+
+                          const pdf = new jsPDF('l', 'pt', 'a4');
+                          pdf.setFontSize(12);
+                          pdf.text('Blood Bank Inventory Report', 40, 30);
+
+                          pdf.autoTable({
+                            head, body,
+                            startY: 45,
+                            styles: { fontSize: 9, cellPadding: 4 },
+                            headStyles: { fillColor: [106, 27, 154], textColor: 255 },
+                            theme: 'grid',
+                            didDrawPage: function (data) {
+                              const page = pdf.internal.getNumberOfPages();
+                              pdf.setFontSize(9);
+                              pdf.text(
+                                'Page ' + page,
+                                pdf.internal.pageSize.getWidth() - 60,
+                                pdf.internal.pageSize.getHeight() - 10
+                              );
+                            }
+                          });
+
+                          pdf.save('Hospital_Inventory_' + new Date().toISOString().slice(0,10) + '.pdf');
+                        };
+
+                        // ---------- Excel (XLSX) ----------
+                        window.exportTableToExcel = function () {
+                          const table = document.getElementById('inventoryTable');
+                          if (!table) { alert('inventoryTable not found'); return; }
+                          if (!window.XLSX) { alert('SheetJS not loaded'); return; }
+
+                          const wb = XLSX.utils.book_new();
+                          const ws = XLSX.utils.table_to_sheet(table, { raw: true });
+                          XLSX.utils.book_append_sheet(wb, ws, 'Inventory');
+
+                          XLSX.writeFile(wb, 'Hospital_Inventory_' + new Date().toISOString().slice(0,10) + '.xlsx');
+                        };
                     </script>
 
                 }
 
 
-        <!-- Dashboard Page -->
-        @if (fullMode && !requestsMode && !ordersMode && !tableOnly)
-        {
-            <h3 class="fw-bold mb-3">Dashboard</h3>
+                <!-- Dashboard Page -->
+                @if (fullMode && !requestsMode && !ordersMode && !tableOnly)
+                {
+                    <h3 class="fw-bold mb-3">Dashboard</h3>
 
-            <div class="row g-3 mb-4">
-                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-1 p-3"><div>Hospitals</div><div class="fs-2 fw-bold">@Model.TotalHospitals</div></div></div>
-                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-2 p-3"><div>Total Units</div><div class="fs-2 fw-bold">@Model.TotalUnits</div></div></div>
-                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-3 p-3"><div>Low-Stock Alerts</div><div class="fs-2 fw-bold">@Model.LowStockHospitals</div></div></div>
-                <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-4 p-3"><div>Pending Requests</div><div class="fs-2 fw-bold">@Model.PendingRequests</div></div></div>
-            </div>
-
-            <div class="row g-4 mb-4">
-                <div class="col-lg-8">
-                    <div class="card card-grad p-3">
-                        <div class="fw-semibold mb-2">Donations Trend (7 days)</div>
-                        <canvas id="lineChart" height="130"></canvas>
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-1 p-3"><div>Hospitals</div><div class="fs-2 fw-bold">@Model.TotalHospitals</div></div></div>
+                        <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-2 p-3"><div>Total Units</div><div class="fs-2 fw-bold">@Model.TotalUnits</div></div></div>
+                        <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-3 p-3"><div>Low-Stock Alerts</div><div class="fs-2 fw-bold">@Model.LowStockHospitals</div></div></div>
+                        <div class="col-sm-6 col-lg-3"><div class="card card-grad grad-4 p-3"><div>Pending Requests</div><div class="fs-2 fw-bold">@Model.PendingRequests</div></div></div>
                     </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="card card-grad p-3">
-                        <div class="fw-semibold mb-2">Stock by Blood Group</div>
-                        <canvas id="barChart" height="210"></canvas>
-                    </div>
-                </div>
-            </div>
 
-            <div class="card card-grad p-3">
-                <h4 class="fw-bold mb-3">Hospital Inventory</h4>
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Hospital</th>
-                                <th>City</th>
-                                <th class="text-center">A+</th>
-                                <th class="text-center">A-</th>
-                                <th class="text-center">B+</th>
-                                <th class="text-center">B-</th>
-                                <th class="text-center">O+</th>
-                                <th class="text-center">O-</th>
-                                <th class="text-center">AB+</th>
-                                <th class="text-center">AB-</th>
-                                <th class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var h in Model.Hospitals)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="fw-bold">@h.Name</div>
-                                        <div class="text-muted small">@h.Email • @h.Phone</div>
-                                    </td>
-                                    <td>@h.City</td>
-                                    <td class="text-center">@h.Stock!.APos</td>
-                                    <td class="text-center">@h.Stock!.ANeg</td>
-                                    <td class="text-center">@h.Stock!.BPos</td>
-                                    <td class="text-center">@h.Stock!.BNeg</td>
-                                    <td class="text-center">@h.Stock!.OPos</td>
-                                    <td class="text-center">@h.Stock!.ONeg</td>
-                                    <td class="text-center">@h.Stock!.ABPos</td>
-                                    <td class="text-center">@h.Stock!.ABNeg</td>
-                                    <td class="text-center fw-bold">@h.Stock!.Total</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
+                    <div class="row g-4 mb-4">
+                        <div class="col-lg-8">
+                            <div class="card card-grad p-3">
+                                <div class="fw-semibold mb-2">Donations Trend (7 days)</div>
+                                <canvas id="lineChart" height="130"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-grad p-3">
+                                <div class="fw-semibold mb-2">Stock by Blood Group</div>
+                                <canvas id="barChart" height="210"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-grad p-3">
+                        <h4 class="fw-bold mb-3">Blood Bank Inventory Reports</h4>
+                        <div class="table-responsive">
+                            <div id="inventoryTableWrapper">
+                                <div class="table-responsive">
+                                    <table id="inventoryTable" class="table align-middle">
+                                        <!-- Optional Title Bar -->
+                                        <caption class="table-caption">
+                                            🩸 Blood Bank Inventory Report
+                                        </caption>
+
+                                        <thead class="custom-header">
+                                            <tr>
+                                                <th>Hospital</th>
+                                                <th>City</th>
+                                                <th class="text-center">A+</th>
+                                                <th class="text-center">A-</th>
+                                                <th class="text-center">B+</th>
+                                                <th class="text-center">B-</th>
+                                                <th class="text-center">O+</th>
+                                                <th class="text-center">O-</th>
+                                                <th class="text-center">AB+</th>
+                                                <th class="text-center">AB-</th>
+                                                <th class="text-center">Total</th>
+                                                <th class="text-center">Last Update Time</th> <!-- 🆕 -->
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var h in Model.Hospitals)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="fw-bold">@h.Name</div>
+                                                        <div class="text-muted small">@h.Email • @h.Phone</div>
+                                                    </td>
+                                                    <td>@h.City</td>
+                                                    <td class="text-center">@h.Stock!.APos</td>
+                                                    <td class="text-center">@h.Stock!.ANeg</td>
+                                                    <td class="text-center">@h.Stock!.BPos</td>
+                                                    <td class="text-center">@h.Stock!.BNeg</td>
+                                                    <td class="text-center">@h.Stock!.OPos</td>
+                                                    <td class="text-center">@h.Stock!.ONeg</td>
+                                                    <td class="text-center">@h.Stock!.ABPos</td>
+                                                    <td class="text-center">@h.Stock!.ABNeg</td>
+                                                    <td class="text-center fw-bold">@h.Stock!.Total</td>
+                                                    <td class="text-center">@h.Stock!.UpdatedAt.ToString("dd-MM-yyyy HH:mm:ss")</td> <!-- 🆕 -->
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+
+
+                            <!-- 🏥 Blood Bank Inventory Table -->
+                            <div class="table-responsive">
+                            </div>
+
+                            <!-- 🧠 Hover Logic Script -->
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const barCanvas = document.getElementById('barChart');
+                                    const getMainChart = () => barCanvas ? Chart.getChart(barCanvas) : null;
+
+                                    // Column indices based on table structure
+                                    const COL = { Apos:2, Aneg:3, Bpos:4, Bneg:5, Opos:6, Oneg:7, ABpos:8, ABneg:9 };
+
+                                    function getNum(td) {
+                                        const txt = (td?.textContent || '').trim().replace(/[^\d-]/g, '');
+                                        const n = parseInt(txt, 10);
+                                        return isNaN(n) ? 0 : n;
+                                    }
+
+                                    function valuesFromRow(tr) {
+                                        const c = tr.cells;
+                                        return [
+                                            getNum(c[COL.Apos]), getNum(c[COL.Aneg]),
+                                            getNum(c[COL.Bpos]), getNum(c[COL.Bneg]),
+                                            getNum(c[COL.Opos]), getNum(c[COL.Oneg]),
+                                            getNum(c[COL.ABpos]), getNum(c[COL.ABneg])
+                                        ];
+                                    }
+
+                                    function hospitalNameFromRow(tr) {
+                                        const strong = tr.querySelector('td:first-child .fw-bold');
+                                        return (strong?.textContent || tr.cells[0]?.textContent || '').trim();
+                                    }
+
+                                    const rows = document.querySelectorAll('#inventoryTable tbody tr');
+                                    let originalTotals = null;
+
+                                    rows.forEach(tr => {
+                                        tr.addEventListener('mouseenter', () => {
+                                            const chart = getMainChart();
+                                            if (!chart) return;
+                                            if (!originalTotals) originalTotals = [...chart.data.datasets[0].data];
+
+                                            const vals = valuesFromRow(tr);
+                                            const name = hospitalNameFromRow(tr);
+
+                                            chart.data.datasets[0].data = vals;
+                                            chart.options.plugins.title = { display: true, text: 'Stock by Blood Group - ' + name };
+                                            chart.update();
+                                        });
+
+                                        tr.addEventListener('mouseleave', () => {
+                                            const chart = getMainChart();
+                                            if (chart && originalTotals) {
+                                                chart.data.datasets[0].data = originalTotals;
+                                                chart.options.plugins.title = { display: true, text: 'Stock by Blood Group - Total' };
+                                                chart.update();
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
+
+
+
+
+
+                            <style>
+                                /* 💜 Top caption bar like Easy DataTable */
+                                .table-caption {
+                                    caption-side: top;
+                                    background: #e6d7ff; /* light lavender */
+                                    color: #1f1f1f;
+                                    font-weight: 600;
+                                    padding: 10px 16px;
+                                    margin: 0;
+                                    text-align: left;
+                                    border-radius: 10px 10px 0 0;
+                                }
+
+                                /* 🟣 Header styling */
+                                #inventoryTable thead.custom-header th {
+                                    background-color: #6a1b9a !important; /* deep purple */
+                                    color: #ffffff !important;
+                                    font-weight: 600;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    border: none;
+                                    padding: 10px;
+                                }
+
+                                /* Ensure th inherits our bg (override Bootstrap) */
+                                #inventoryTable > :not(caption) > * > * {
+                                    background-color: inherit;
+                                }
+
+                                /* Rounded header corners */
+                                #inventoryTable thead.custom-header th:first-child {
+                                    border-top-left-radius: 10px;
+                                }
+
+                                #inventoryTable thead.custom-header th:last-child {
+                                    border-top-right-radius: 10px;
+                                }
+
+                                /* Zebra striping */
+                                #inventoryTable tbody tr:nth-child(odd) {
+                                    background-color: #f9f9f9;
+                                }
+
+                                #inventoryTable tbody tr:nth-child(even) {
+                                    background-color: #ffffff;
+                                }
+
+                                #inventoryTable tbody tr:hover {
+                                    background-color: #f1f1f1;
+                                }
+
+                                /* Sticky header when scrolling */
+                                #inventoryTable thead.custom-header th {
+                                    position: sticky;
+                                    top: 0;
+                                    z-index: 2;
+                                }
+                            </style>
+
+                        </div>
+
+                    </div>
+                }
+        </div>
     </div>
-</div>
 
 @if (fullMode && !requestsMode && !ordersMode && !tableOnly)
 {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
-    <script>
-        const C = getComputedStyle(document.documentElement);
-        const colors = [
-            C.getPropertyValue('--Apos').trim(), C.getPropertyValue('--Aneg').trim(),
-            C.getPropertyValue('--Bpos').trim(), C.getPropertyValue('--Bneg').trim(),
-            C.getPropertyValue('--Opos').trim(), C.getPropertyValue('--Oneg').trim(),
-            C.getPropertyValue('--ABpos').trim(), C.getPropertyValue('--ABneg').trim()
-        ];
-        new Chart(document.getElementById('lineChart'), {
-            type: 'line',
-            data: {
-                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Days)),
-                datasets: [{
-                    label: 'Donations',
-                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DonationsPerDay)),
-                    borderColor: '#4e54c8', backgroundColor: 'rgba(78,84,200,.15)', fill: true, tension: .35, pointRadius: 3
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-        new Chart(document.getElementById('barChart'), {
-            type: 'bar',
-            data: {
-                labels: ['A+','A-','B+','B-','O+','O-','AB+','AB-'],
-                datasets: [{
-                    data: [@Model.APos,@Model.ANeg,@Model.BPos,@Model.BNeg,@Model.OPos,@Model.ONeg,@Model.ABPos,@Model.ABNeg],
-                    backgroundColor: colors, borderRadius: 8
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-    </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+        <script>
+            const C = getComputedStyle(document.documentElement);
+            const colors = [
+                C.getPropertyValue('--Apos').trim(), C.getPropertyValue('--Aneg').trim(),
+                C.getPropertyValue('--Bpos').trim(), C.getPropertyValue('--Bneg').trim(),
+                C.getPropertyValue('--Opos').trim(), C.getPropertyValue('--Oneg').trim(),
+                C.getPropertyValue('--ABpos').trim(), C.getPropertyValue('--ABneg').trim()
+            ];
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Days)),
+                    datasets: [{
+                        label: 'Donations',
+                        data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DonationsPerDay)),
+                        borderColor: '#4e54c8', backgroundColor: 'rgba(78,84,200,.15)', fill: true, tension: .35, pointRadius: 3
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+            new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['A+','A-','B+','B-','O+','O-','AB+','AB-'],
+                    datasets: [{
+                        data: [@Model.APos,@Model.ANeg,@Model.BPos,@Model.BNeg,@Model.OPos,@Model.ONeg,@Model.ABPos,@Model.ABNeg],
+                        backgroundColor: colors, borderRadius: 8
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        </script>
 }

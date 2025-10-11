@@ -11,14 +11,25 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text;
 using System.Security.Cryptography;
+using BloodHubApp.Services;
 
 namespace BloodHub.Controllers
 {
     public class DashboardController : Controller
     {
-
         private readonly BloodHubContext _db;
-        public DashboardController(BloodHubContext db) => _db = db;
+        private readonly INotificationService _notificationService;
+        private readonly ILogger<DashboardController> _logger;
+
+        public DashboardController(
+            BloodHubContext db, 
+            INotificationService notificationService,
+            ILogger<DashboardController> logger)
+        {
+            _db = db;
+            _notificationService = notificationService;
+            _logger = logger;
+        }
 
         [HttpGet]
 
@@ -326,7 +337,36 @@ namespace BloodHub.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> SaveRequest(int hospitalId, string bloodGroup, int units, string personName, string mobileNumber, string address)
+        //public async Task<IActionResult> SaveRequest(int hospitalId, string bloodGroup, int units, string personName, string mobileNumber, string address)
+        //{
+        //    if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
+        //        return RedirectToAction("Login", "Account");
+
+        //    var req = new BloodRequest
+        //    {
+        //        HospitalId = hospitalId,
+        //        BloodGroup = bloodGroup,
+        //        Units = units,
+        //        PersonName = personName,       // NEW
+        //        MobileNumber = mobileNumber,   // NEW
+        //        Address = address,             // NEW
+        //        Status = "Pending",
+        //        RequestedAt = DateTime.Now
+        //    };
+
+        //    _db.BloodRequests.Add(req);
+        //    await _db.SaveChangesAsync();
+
+        //    TempData["Success"] = "Request  updated successfully ✅";
+
+        //    return RedirectToAction("Index", new { mode = "requests" });
+        //}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveRequest(
+            int hospitalId, string bloodGroup, int units,
+            string personName, string mobileNumber, string address)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("Username")))
                 return RedirectToAction("Login", "Account");
@@ -336,9 +376,9 @@ namespace BloodHub.Controllers
                 HospitalId = hospitalId,
                 BloodGroup = bloodGroup,
                 Units = units,
-                PersonName = personName,       // NEW
-                MobileNumber = mobileNumber,   // NEW
-                Address = address,             // NEW
+                PersonName = personName,
+                MobileNumber = mobileNumber,
+                Address = address,
                 Status = "Pending",
                 RequestedAt = DateTime.Now
             };
@@ -346,9 +386,135 @@ namespace BloodHub.Controllers
             _db.BloodRequests.Add(req);
             await _db.SaveChangesAsync();
 
+            // Get requesting hospital details (from Users table - the actual hospital)
+            var requestingUsername = HttpContext.Session.GetString("Username");
+            var requestingHospital = await _db.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Username == requestingUsername);
+
+            var requestingHospitalName = requestingHospital?.Username ?? "Hospital";
+            var requestingHospitalEmail = requestingHospital?.Email ?? "";
+
+            // Send notifications to blood banks (Hospitals table) that have sufficient stock
+            try
+            {
+                // Find blood banks with sufficient stock for the requested blood group
+                var bloodBanks = await _db.Hospitals
+                    .Include(h => h.Stock)
+                    .Where(h => h.IsActive && 
+                                h.Email != null && 
+                                h.Stock != null)
+                    .ToListAsync();
+
+                // Filter blood banks that have sufficient units
+                var matchingBloodBanks = bloodBanks.Where(bb =>
+                {
+                    if (bb.Stock == null) return false;
+
+                    return bloodGroup switch
+                    {
+                        "A+" => bb.Stock.APos >= units,
+                        "A-" => bb.Stock.ANeg >= units,
+                        "B+" => bb.Stock.BPos >= units,
+                        "B-" => bb.Stock.BNeg >= units,
+                        "O+" => bb.Stock.OPos >= units,
+                        "O-" => bb.Stock.ONeg >= units,
+                        "AB+" => bb.Stock.ABPos >= units,
+                        "AB-" => bb.Stock.ABNeg >= units,
+                        _ => false
+                    };
+                }).ToList();
+
+                _logger.LogInformation(
+                    "Blood request created by {Hospital}: {BloodGroup}, {Units} units. Found {Count} matching blood banks",
+                    requestingHospitalName, bloodGroup, units, matchingBloodBanks.Count);
+
+                if (matchingBloodBanks.Any())
+                {
+                    var emailSubject = $"🩸 Blood Request: {bloodGroup} ({units} units) - From {requestingHospitalName}";
+                    var emailBody = $@"
+                        <html>
+                        <body style='font-family: Arial, sans-serif; padding: 20px;'>
+                            <h2 style='color: #d32f2f;'>New Blood Request from Hospital</h2>
+                            <div style='background: #f5f5f5; padding: 15px; border-left: 4px solid #d32f2f;'>
+                                <h3>Requesting Hospital Details:</h3>
+                                <p><strong>Hospital Name:</strong> {requestingHospitalName}</p>
+                                <p><strong>Contact Email:</strong> {requestingHospitalEmail}</p>
+                                <p><strong>Contact Phone:</strong> {mobileNumber}</p>
+                            </div>
+                            <div style='margin-top: 20px;'>
+                                <h3>Blood Requirement:</h3>
+                                <p><strong>Blood Group:</strong> <span style='color: #d32f2f; font-weight: bold; font-size: 18px;'>{bloodGroup}</span></p>
+                                <p><strong>Units Required:</strong> {units}</p>
+                                <p><strong>Patient Name:</strong> {personName}</p>
+                                <p><strong>Patient Address:</strong> {address}</p>
+                                <p><strong>Requested On:</strong> {DateTime.Now:dd MMM yyyy, hh:mm tt}</p>
+                            </div>
+                            <hr/>
+                            <p style='color: #555;'>Please contact the requesting hospital if you can fulfill this blood requirement.</p>
+                            <p style='color: #999; font-size: 12px;'>This is an automated notification from BloodHub System.</p>
+                        </body>
+                        </html>
+                    ";
+
+                    // Send emails to all matching blood banks
+                    var emailTasks = matchingBloodBanks.Select(async bloodBank =>
+                    {
+                        try
+                        {
+                            await _notificationService.SendEmailAsync(
+                                to: bloodBank.Email!,
+                                subject: emailSubject,
+                                htmlBody: emailBody
+                            );
+                            _logger.LogInformation("Notification sent to blood bank: {BloodBank} ({Email})", 
+                                bloodBank.Name, bloodBank.Email);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "Failed to send notification to blood bank {BloodBank}", bloodBank.Name);
+                        }
+                    });
+
+                    await Task.WhenAll(emailTasks);
+                }
+                else
+                {
+                    _logger.LogInformation("No blood banks found with sufficient {BloodGroup} stock ({Units} units)", 
+                        bloodGroup, units);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending blood request notifications");
+            }
+
+            // Prepare PDF data
+            var dto = new
+            {
+                id = req.Id,
+                hospitalId = req.HospitalId,
+                hospitalName = requestingHospitalName,
+                bloodGroup = req.BloodGroup,
+                units = req.Units,
+                personName = req.PersonName,
+                mobileNumber = req.MobileNumber,
+                address = req.Address,
+                status = req.Status,
+                requestedAt = req.RequestedAt
+            };
+
+            TempData["LastRequestJson"] = System.Text.Json.JsonSerializer.Serialize(
+                dto,
+                new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = null,
+                    WriteIndented = false
+                });
+
+            TempData["Success"] = "Request created successfully ✅";
             return RedirectToAction("Index", new { mode = "requests" });
         }
-
 
         public IActionResult Index1(string mode)
         {
@@ -523,7 +689,7 @@ namespace BloodHub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
+
         public async Task<IActionResult> DonorService(Donor donor)
         {
             // ensure hospitals are available if we re-render view (we actually redirect to Index)

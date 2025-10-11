@@ -32,6 +32,9 @@ namespace BloodHub.Models
         [EmailAddress]
         public string Email { get; set; } = "";
 
+        [Required, StringLength(10)]
+        public string BloodGroup { get; set; } = ""; // A+, A-, B+, B-, O+, O-, AB+, AB-
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // navigation
