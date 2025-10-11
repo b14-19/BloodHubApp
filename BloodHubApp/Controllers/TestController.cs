@@ -31,20 +31,22 @@ namespace BloodHub.Controllers
             var result = new StringBuilder();
             result.AppendLine("=== BLOODHUB NOTIFICATION SYSTEM VERIFICATION ===\n");
 
-            // 1. Check SMTP Configuration
-            result.AppendLine("1. SMTP CONFIGURATION:");
-            var smtpHost = _configuration["Notifications:Smtp:Host"];
-            var smtpPort = _configuration["Notifications:Smtp:Port"];
-            var smtpFrom = _configuration["Notifications:Smtp:From"];
-            var smtpUser = _configuration["Notifications:Smtp:User"];
-            var smtpPass = _configuration["Notifications:Smtp:Pass"];
+            // 1. Check Azure Communication Services Configuration
+            result.AppendLine("1. AZURE COMMUNICATION SERVICES:");
+            var acsConnectionString = _configuration["AzureCommunication:ConnectionString"];
+            var acsSenderAddress = _configuration["AzureCommunication:SenderAddress"];
 
-            result.AppendLine($"   Host: {(string.IsNullOrEmpty(smtpHost) ? "NOT SET" : smtpHost)}");
-            result.AppendLine($"   Port: {(string.IsNullOrEmpty(smtpPort) ? "NOT SET" : smtpPort)}");
-            result.AppendLine($"   From: {(string.IsNullOrEmpty(smtpFrom) ? "NOT SET" : smtpFrom)}");
-            result.AppendLine($"   User: {(string.IsNullOrEmpty(smtpUser) ? "NOT SET" : smtpUser)}");
-            result.AppendLine($"   Pass: {(string.IsNullOrEmpty(smtpPass) ? "NOT SET" : new string('*', Math.Min(smtpPass?.Length ?? 0, 16)))}");
+            result.AppendLine($"   Connection String: {(string.IsNullOrEmpty(acsConnectionString) ? "NOT SET" : "CONFIGURED")}");
+            result.AppendLine($"   Sender Address: {(string.IsNullOrEmpty(acsSenderAddress) ? "NOT SET" : acsSenderAddress)}");
             result.AppendLine();
+
+            // Check old SMTP config (should not be used)
+            var smtpHost = _configuration["Notifications:Smtp:Host"];
+            if (!string.IsNullOrEmpty(smtpHost))
+            {
+                result.AppendLine("   ?? Old SMTP configuration detected (will be ignored)");
+                result.AppendLine();
+            }
 
             // 2. Check Blood Banks
             result.AppendLine("2. BLOOD BANKS WITH EMAIL:");
@@ -59,6 +61,7 @@ namespace BloodHub.Controllers
             }
             else
             {
+                result.AppendLine($"   Found {bloodBanks.Count} blood banks:");
                 foreach (var bb in bloodBanks)
                 {
                     result.AppendLine($"   - {bb.Name}");
@@ -131,9 +134,10 @@ namespace BloodHub.Controllers
 
             // 5. Test Email Functionality
             result.AppendLine("5. EMAIL TEST:");
-            if (string.IsNullOrEmpty(smtpHost) || string.IsNullOrEmpty(smtpFrom))
+            if (string.IsNullOrEmpty(acsConnectionString) || string.IsNullOrEmpty(acsSenderAddress))
             {
-                result.AppendLine("   SKIPPED - SMTP not configured");
+                result.AppendLine("   SKIPPED - Azure Communication Services not configured");
+                result.AppendLine("   ACTION: See AZURE_COMMUNICATION_SETUP.md");
             }
             else
             {
@@ -141,10 +145,19 @@ namespace BloodHub.Controllers
                 {
                     var testResult = await _notificationService.SendEmailAsync(
                         to: "narasimhasez@gmail.com",
-                        subject: "BloodHub Test Email",
-                        htmlBody: "<h1>Test Successful!</h1><p>Email notifications are working.</p>"
+                        subject: "BloodHub Test Email - Azure Communication Services",
+                        htmlBody: @"<html><body style='font-family: Arial; padding: 20px;'>
+                            <h1>Test Successful!</h1>
+                            <p>Your BloodHub application is now using <strong>Azure Communication Services</strong> for email notifications.</p>
+                            <p>This is a production-ready, secure email service.</p>
+                            <p><strong>Time:</strong> " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + @"</p>
+                            </body></html>"
                     );
                     result.AppendLine($"   {(testResult ? "EMAIL SENT SUCCESSFULLY" : "EMAIL SEND FAILED")}");
+                    if (testResult)
+                    {
+                        result.AppendLine($"   Sent from: {acsSenderAddress}");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -155,24 +168,25 @@ namespace BloodHub.Controllers
 
             // 6. Summary
             result.AppendLine("6. SUMMARY:");
-            var smtpConfigured = !string.IsNullOrEmpty(smtpHost) && !string.IsNullOrEmpty(smtpFrom);
+            var acsConfigured = !string.IsNullOrEmpty(acsConnectionString) && !string.IsNullOrEmpty(acsSenderAddress);
             var bloodBankExists = narasimha != null;
             var hasInventory = narasimha?.Stock != null;
             
-            result.AppendLine($"   SMTP Configured: {smtpConfigured}");
+            result.AppendLine($"   Azure Communication Services: {(acsConfigured ? "CONFIGURED" : "NOT CONFIGURED")}");
             result.AppendLine($"   Blood Bank Exists: {bloodBankExists}");
             result.AppendLine($"   Has Inventory: {hasInventory}");
             result.AppendLine();
 
-            if (smtpConfigured && bloodBankExists && hasInventory)
+            if (acsConfigured && bloodBankExists && hasInventory)
             {
-                result.AppendLine("   SYSTEM READY!");
+                result.AppendLine("   ? SYSTEM READY FOR PRODUCTION!");
+                result.AppendLine("   Using Azure Communication Services (secure & scalable)");
             }
             else
             {
                 result.AppendLine("   ACTION REQUIRED:");
-                if (!smtpConfigured)
-                    result.AppendLine("   - Configure SMTP in Azure App Service");
+                if (!acsConfigured)
+                    result.AppendLine("   - Set up Azure Communication Services (see AZURE_COMMUNICATION_SETUP.md)");
                 if (!bloodBankExists)
                     result.AppendLine("   - Add Narasimha Blood Bank to database");
                 if (bloodBankExists && !hasInventory)

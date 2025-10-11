@@ -38,8 +38,8 @@ builder.Services.AddDbContext<BloodHubContext>(o =>
         }));
 builder.Services.AddSession();
 
-// Register NotificationService
-builder.Services.AddScoped<INotificationService, NotificationService>();
+// Register NotificationService - Use Azure Communication Services for production
+builder.Services.AddScoped<INotificationService, AzureEmailService>();
 
 var app = builder.Build();
 
